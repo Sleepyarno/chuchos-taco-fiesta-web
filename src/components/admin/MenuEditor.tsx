@@ -17,12 +17,21 @@ interface MenuItem {
   description: string;
 }
 
-// Define the MenuData type with an index signature
+// Define specific categories to match the JSON structure
+interface MenuCategories {
+  snacks: MenuItem[];
+  tacos: MenuItem[];
+  "special-tacos": MenuItem[];
+  burritos: MenuItem[];
+  sides: MenuItem[];
+  drinks: MenuItem[];
+  [key: string]: MenuItem[]; // Allow for additional dynamic categories
+}
+
+// Define the MenuData type that matches the exact structure
 interface MenuData {
   categories: { id: string; name: string }[];
-  menuItems: {
-    [key: string]: MenuItem[]; // This adds the string index signature
-  };
+  menuItems: MenuCategories;
 }
 
 const MenuEditor = () => {
@@ -38,12 +47,15 @@ const MenuEditor = () => {
     });
   };
 
-  const handleItemChange = (categoryId: string, itemId: number, field: keyof MenuItem, value: any) => {
+  const handleItemChange = (categoryId: string, itemId: number, field: keyof MenuItem, value: string | number) => {
     const newMenuData = {...menuData};
     const itemIndex = newMenuData.menuItems[categoryId].findIndex(item => item.id === itemId);
     
     if (itemIndex !== -1) {
-      newMenuData.menuItems[categoryId][itemIndex][field] = value;
+      newMenuData.menuItems[categoryId][itemIndex] = {
+        ...newMenuData.menuItems[categoryId][itemIndex],
+        [field]: value
+      };
       setMenuData(newMenuData);
     }
   };
