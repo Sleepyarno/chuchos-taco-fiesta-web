@@ -1,7 +1,11 @@
 
 import { Instagram, Mail, Globe, Facebook } from "lucide-react";
+import { getHoursData, getContactData } from "@/utils/dataManager";
 
 const Footer = () => {
+  const hoursData = getHoursData();
+  const contactData = getContactData();
+
   return (
     <footer className="bg-dark-purple text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
@@ -17,20 +21,25 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Hours</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>Open Now</li>
-              <li>Price Range: ££</li>
-              <li>Dine in · Outdoor seating · In-store collection</li>
+              <li>{hoursData.status}</li>
+              <li>Price Range: {hoursData.priceRange}</li>
+              <li>{hoursData.dineOptions.join(' · ')}</li>
+              {hoursData.hours.map((dayHour, index) => (
+                <li key={index} className={dayHour.hours === "Closed" ? "opacity-70" : ""}>
+                  {dayHour.day}: {dayHour.hours}
+                </li>
+              ))}
             </ul>
           </div>
           
           <div>
             <h3 className="text-xl font-bold mb-4">Contact</h3>
             <address className="not-italic text-gray-300 space-y-2">
-              <p>279 Shields Road</p>
-              <p>Newcastle upon Tyne, NE6 1DQ</p>
-              <p>United Kingdom</p>
-              <p>0191 265 7458</p>
-              <p>chuchosbyker@gmail.com</p>
+              <p>{contactData.address.street}</p>
+              <p>{contactData.address.city}, {contactData.address.postcode}</p>
+              <p>{contactData.address.country}</p>
+              <p>{contactData.phone}</p>
+              <p>{contactData.email}</p>
             </address>
           </div>
         </div>
@@ -41,16 +50,16 @@ const Footer = () => {
           </p>
           
           <div className="flex space-x-4">
-            <a href="https://www.facebook.com/chuchostacos" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+            <a href={contactData.social.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Facebook className="h-5 w-5" />
             </a>
-            <a href="https://www.instagram.com/chuchostacos/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+            <a href={contactData.social.instagram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Instagram className="h-5 w-5" />
             </a>
-            <a href="mailto:chuchosbyker@gmail.com" className="text-gray-400 hover:text-white transition-colors">
+            <a href={`mailto:${contactData.email}`} className="text-gray-400 hover:text-white transition-colors">
               <Mail className="h-5 w-5" />
             </a>
-            <a href="https://qrco.de/bdLOoI" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+            <a href={contactData.website} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Globe className="h-5 w-5" />
             </a>
           </div>

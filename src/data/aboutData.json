@@ -1,0 +1,26 @@
+
+{
+  "image": "/lovable-uploads/8d683bdc-68c1-4543-b273-abab4713875d.png",
+  "title": "Our Story",
+  "paragraphs": [
+    "We are passionate about fresh, authentic Mexican street food. Our signature tacos - with homemade corn flour tortillas - come with a range of delicious toppings, including our homemade chili salsas.",
+    "We also serve popular snacks like nachos, molletes and quesadillas, as well as desserts. Mexican beers and Mexican inspired cocktails complement our food perfectly. Our restaurant is at the top of Shields Road in Newcastle-upon-Tyne, with takeaway available and catering for outside events (markets, festivals, parties, weddings) across the North East."
+  ],
+  "features": [
+    {
+      "icon": "CalendarClock",
+      "title": "Highly Rated",
+      "description": "94% recommend"
+    },
+    {
+      "icon": "UtensilsCrossed",
+      "title": "Authentic Taste",
+      "description": "Traditional recipes"
+    },
+    {
+      "icon": "Users",
+      "title": "Great Value",
+      "description": "Price range · ££"
+    }
+  ]
+}

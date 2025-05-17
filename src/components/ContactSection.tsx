@@ -1,7 +1,11 @@
+
 import { MapPin, Phone, Mail, Instagram, Globe, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getContactData } from "@/utils/dataManager";
 
 const ContactSection = () => {
+  const contactData = getContactData();
+
   return (
     <section id="contact" className="py-16">
       <h2 className="text-4xl font-bold mb-8 text-center text-gray-800">Visit Us</h2>
@@ -28,10 +32,10 @@ const ContactSection = () => {
               <div>
                 <h4 className="font-bold text-lg">Address</h4>
                 <p className="text-gray-700">
-                  279 Shields Road<br />
-                  Newcastle upon Tyne<br />
-                  NE6 1DQ<br />
-                  United Kingdom
+                  {contactData.address.street}<br />
+                  {contactData.address.city}<br />
+                  {contactData.address.postcode}<br />
+                  {contactData.address.country}
                 </p>
               </div>
             </div>
@@ -40,7 +44,7 @@ const ContactSection = () => {
               <Phone className="h-6 w-6 text-bright-orange mr-4 mt-1" />
               <div>
                 <h4 className="font-bold text-lg">Phone</h4>
-                <p className="text-gray-700">0191 265 7458</p>
+                <p className="text-gray-700">{contactData.phone}</p>
               </div>
             </div>
             
@@ -48,7 +52,7 @@ const ContactSection = () => {
               <Mail className="h-6 w-6 text-bright-orange mr-4 mt-1" />
               <div>
                 <h4 className="font-bold text-lg">Email</h4>
-                <p className="text-gray-700">chuchosbyker@gmail.com</p>
+                <p className="text-gray-700">{contactData.email}</p>
               </div>
             </div>
             
@@ -57,12 +61,12 @@ const ContactSection = () => {
               <div>
                 <h4 className="font-bold text-lg">Website</h4>
                 <p className="text-gray-700">
-                  <a href="https://qrco.de/bdLOoI" target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:underline">
+                  <a href={contactData.website} target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:underline">
                     Menu & Info
                   </a>
                 </p>
                 <p className="text-gray-700">
-                  <a href="https://web.dojo.app/create_booking/vendor/na4cS23Q_dbOflGtF_KvXOpSxC8lj5cSAinabhp8EaQ_restaurant" target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:underline">
+                  <a href={contactData.bookingUrl} target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:underline">
                     Book a Table
                   </a>
                 </p>
@@ -72,10 +76,10 @@ const ContactSection = () => {
             <div className="pt-4">
               <h4 className="font-bold text-lg mb-4">Follow Us</h4>
               <div className="flex space-x-4">
-                <a href="https://www.facebook.com/chuchostacos" target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:text-bright-orange transition-colors">
+                <a href={contactData.social.facebook} target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:text-bright-orange transition-colors">
                   <Facebook className="h-8 w-8" />
                 </a>
-                <a href="https://www.instagram.com/chuchostacos/" target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:text-bright-orange transition-colors">
+                <a href={contactData.social.instagram} target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:text-bright-orange transition-colors">
                   <Instagram className="h-8 w-8" />
                 </a>
               </div>
@@ -83,7 +87,7 @@ const ContactSection = () => {
           </div>
           
           <Button className="w-full mt-8 bg-bright-orange hover:bg-orange-600">
-            <a href="https://web.dojo.app/create_booking/vendor/na4cS23Q_dbOflGtF_KvXOpSxC8lj5cSAinabhp8EaQ_restaurant" target="_blank" rel="noopener noreferrer" className="w-full">
+            <a href={contactData.bookingUrl} target="_blank" rel="noopener noreferrer" className="w-full">
               Book a Table Online
             </a>
           </Button>

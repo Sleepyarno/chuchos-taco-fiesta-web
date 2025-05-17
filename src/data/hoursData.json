@@ -1,0 +1,15 @@
+
+{
+  "status": "Open Now",
+  "priceRange": "££",
+  "dineOptions": ["Dine in", "Outdoor seating", "In-store collection"],
+  "hours": [
+    {"day": "Monday", "hours": "Closed"},
+    {"day": "Tuesday", "hours": "12:00 - 20:00"},
+    {"day": "Wednesday", "hours": "12:00 - 20:00"},
+    {"day": "Thursday", "hours": "12:00 - 20:00"},
+    {"day": "Friday", "hours": "12:00 - 21:00"},
+    {"day": "Saturday", "hours": "12:00 - 21:00"},
+    {"day": "Sunday", "hours": "12:00 - 20:00"}
+  ]
+}
