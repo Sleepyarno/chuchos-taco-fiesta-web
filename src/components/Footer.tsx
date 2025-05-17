@@ -9,15 +9,15 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Chucho's Tacos</h3>
             <p className="text-gray-300">
-              Serving authentic Mexican flavors in Newcastle upon Tyne. Our commitment is to quality, 
-              tradition, and the perfect taco experience.
+              Serving authentic Mexican street food in Newcastle upon Tyne. Our signature tacos come with homemade corn flour tortillas and 
+              a range of delicious toppings, including our homemade chili salsas.
             </p>
           </div>
           
           <div>
             <h3 className="text-xl font-bold mb-4">Hours</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>Monday - Sunday: Open Now</li>
+              <li>Open Now</li>
               <li>Price Range: ££</li>
               <li>Dine in · Outdoor seating · In-store collection</li>
             </ul>

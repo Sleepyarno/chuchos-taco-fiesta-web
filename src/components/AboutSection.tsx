@@ -20,15 +20,13 @@ const AboutSection = () => {
           <div>
             <h3 className="text-2xl font-bold mb-4 text-vivid-purple">Our Story</h3>
             <p className="text-gray-700 mb-6">
-              Chucho's Tacos brings authentic Mexican street food flavors to Newcastle upon Tyne. 
-              We've become a local favourite for genuine Mexican cuisine, with a 94% recommendation rate 
-              from over 600 reviews.
+              We are passionate about fresh, authentic Mexican street food. Our signature tacos - with homemade corn flour tortillas - 
+              come with a range of delicious toppings, including our homemade chili salsas.
             </p>
             <p className="text-gray-700 mb-6">
-              From our handmade tortillas to our slow-cooked meats and house-made salsas, 
-              we pride ourselves on authenticity and quality in every dish. Our family-owned 
-              restaurant welcomes you to experience the true taste of Mexico in a friendly, 
-              casual atmosphere in the heart of Byker.
+              We also serve popular snacks like nachos, molletes and quesadillas, as well as desserts. Mexican beers and Mexican inspired cocktails 
+              complement our food perfectly. Our restaurant is at the top of Shields Road in Newcastle-upon-Tyne, with takeaway available and 
+              catering for outside events (markets, festivals, parties, weddings) across the North East.
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
@@ -43,7 +41,7 @@ const AboutSection = () => {
                 <CardContent className="p-4 flex flex-col items-center text-center">
                   <UtensilsCrossed className="h-8 w-8 text-bright-orange mb-2" />
                   <h4 className="font-bold">Authentic Taste</h4>
-                  <p className="text-sm text-gray-600">Traditional methods</p>
+                  <p className="text-sm text-gray-600">Traditional recipes</p>
                 </CardContent>
               </Card>
               <Card className="bg-soft-gray">

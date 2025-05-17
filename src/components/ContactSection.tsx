@@ -1,5 +1,5 @@
 
-import { MapPin, Phone, Mail, Instagram, Globe } from "lucide-react";
+import { MapPin, Phone, Mail, Instagram, Globe, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const ContactSection = () => {
