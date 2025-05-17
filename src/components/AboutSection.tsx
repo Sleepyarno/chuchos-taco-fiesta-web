@@ -20,23 +20,23 @@ const AboutSection = () => {
           <div>
             <h3 className="text-2xl font-bold mb-4 text-vivid-purple">Our Story</h3>
             <p className="text-gray-700 mb-6">
-              Chucho's Tacos brings authentic Mexican street food flavors to Arlington, TX. 
-              Established with a passion for traditional recipes and fresh ingredients, 
-              we've become a local favorite for genuine Mexican cuisine.
+              Chucho's Tacos brings authentic Mexican street food flavors to Newcastle upon Tyne. 
+              We've become a local favourite for genuine Mexican cuisine, with a 94% recommendation rate 
+              from over 600 reviews.
             </p>
             <p className="text-gray-700 mb-6">
               From our handmade tortillas to our slow-cooked meats and house-made salsas, 
               we pride ourselves on authenticity and quality in every dish. Our family-owned 
               restaurant welcomes you to experience the true taste of Mexico in a friendly, 
-              casual atmosphere.
+              casual atmosphere in the heart of Byker.
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               <Card className="bg-soft-gray">
                 <CardContent className="p-4 flex flex-col items-center text-center">
                   <CalendarClock className="h-8 w-8 text-bright-orange mb-2" />
-                  <h4 className="font-bold">Est. 2015</h4>
-                  <p className="text-sm text-gray-600">Serving since</p>
+                  <h4 className="font-bold">Highly Rated</h4>
+                  <p className="text-sm text-gray-600">94% recommend</p>
                 </CardContent>
               </Card>
               <Card className="bg-soft-gray">
@@ -49,8 +49,8 @@ const AboutSection = () => {
               <Card className="bg-soft-gray">
                 <CardContent className="p-4 flex flex-col items-center text-center">
                   <Users className="h-8 w-8 text-bright-orange mb-2" />
-                  <h4 className="font-bold">Family Owned</h4>
-                  <p className="text-sm text-gray-600">Local favorite</p>
+                  <h4 className="font-bold">Great Value</h4>
+                  <p className="text-sm text-gray-600">Price range · ££</p>
                 </CardContent>
               </Card>
             </div>

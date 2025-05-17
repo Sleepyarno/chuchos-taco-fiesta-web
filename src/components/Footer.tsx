@@ -1,5 +1,5 @@
 
-import { Facebook, Instagram, Mail } from "lucide-react";
+import { Facebook, Instagram, Mail, Globe } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -9,7 +9,7 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Chucho's Tacos</h3>
             <p className="text-gray-300">
-              Serving authentic Mexican flavors since 2015. Our commitment is to quality, 
+              Serving authentic Mexican flavors in Newcastle upon Tyne. Our commitment is to quality, 
               tradition, and the perfect taco experience.
             </p>
           </div>
@@ -17,20 +17,20 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Hours</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>Monday - Thursday: 7am - 10pm</li>
-              <li>Friday: 7am - 12am</li>
-              <li>Saturday: 8am - 12am</li>
-              <li>Sunday: 8am - 10pm</li>
+              <li>Monday - Sunday: Open Now</li>
+              <li>Price Range: ££</li>
+              <li>Dine in · Outdoor seating · In-store collection</li>
             </ul>
           </div>
           
           <div>
             <h3 className="text-xl font-bold mb-4">Contact</h3>
             <address className="not-italic text-gray-300 space-y-2">
-              <p>1215 E Pioneer Pkwy</p>
-              <p>Arlington, TX 76010</p>
-              <p>(817) 801-4962</p>
-              <p>info@chuchostacos.com</p>
+              <p>279 Shields Road</p>
+              <p>Newcastle upon Tyne, NE6 1DQ</p>
+              <p>United Kingdom</p>
+              <p>0191 265 7458</p>
+              <p>chuchosbyker@gmail.com</p>
             </address>
           </div>
         </div>
@@ -47,8 +47,11 @@ const Footer = () => {
             <a href="https://www.instagram.com/chuchostacos/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Instagram className="h-5 w-5" />
             </a>
-            <a href="mailto:info@chuchostacos.com" className="text-gray-400 hover:text-white transition-colors">
+            <a href="mailto:chuchosbyker@gmail.com" className="text-gray-400 hover:text-white transition-colors">
               <Mail className="h-5 w-5" />
+            </a>
+            <a href="https://qrco.de/bdLOoI" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+              <Globe className="h-5 w-5" />
             </a>
           </div>
         </div>

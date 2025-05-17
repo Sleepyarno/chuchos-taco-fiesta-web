@@ -1,5 +1,5 @@
 
-import { MapPin, Phone, Clock, Instagram, Facebook } from "lucide-react";
+import { MapPin, Phone, Mail, Instagram, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const ContactSection = () => {
@@ -10,7 +10,7 @@ const ContactSection = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <div className="rounded-lg overflow-hidden shadow-lg">
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3289.6245112282373!2d-97.06972488477802!3d32.7364202804119!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864e7d72a1f7a349%3A0xc0db8b89e8e35962!2sChucho&#39;s%20Tacos!5e0!3m2!1sen!2sus!4v1650473761659!5m2!1sen!2sus" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2289.5802559947466!2d-1.5892890234476738!3d54.981248157845535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487e70c7fee7c0d1%3A0x6cb8af89c6afbf9a!2s279%20Shields%20Rd%2C%20Byker%2C%20Newcastle%20upon%20Tyne%20NE6%201DQ%2C%20UK!5e0!3m2!1sen!2sus!4v1684825461170!5m2!1sen!2sus" 
             width="100%" 
             height="450" 
             style={{ border: 0 }} 
@@ -29,9 +29,10 @@ const ContactSection = () => {
               <div>
                 <h4 className="font-bold text-lg">Address</h4>
                 <p className="text-gray-700">
-                  1215 E Pioneer Pkwy<br />
-                  Arlington, TX 76010<br />
-                  United States
+                  279 Shields Road<br />
+                  Newcastle upon Tyne<br />
+                  NE6 1DQ<br />
+                  United Kingdom
                 </p>
               </div>
             </div>
@@ -40,19 +41,31 @@ const ContactSection = () => {
               <Phone className="h-6 w-6 text-bright-orange mr-4 mt-1" />
               <div>
                 <h4 className="font-bold text-lg">Phone</h4>
-                <p className="text-gray-700">(817) 801-4962</p>
+                <p className="text-gray-700">0191 265 7458</p>
               </div>
             </div>
             
             <div className="flex items-start">
-              <Clock className="h-6 w-6 text-bright-orange mr-4 mt-1" />
+              <Mail className="h-6 w-6 text-bright-orange mr-4 mt-1" />
               <div>
-                <h4 className="font-bold text-lg">Hours</h4>
+                <h4 className="font-bold text-lg">Email</h4>
+                <p className="text-gray-700">chuchosbyker@gmail.com</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <Globe className="h-6 w-6 text-bright-orange mr-4 mt-1" />
+              <div>
+                <h4 className="font-bold text-lg">Website</h4>
                 <p className="text-gray-700">
-                  Monday - Thursday: 7am - 10pm<br />
-                  Friday: 7am - 12am<br />
-                  Saturday: 8am - 12am<br />
-                  Sunday: 8am - 10pm
+                  <a href="https://qrco.de/bdLOoI" target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:underline">
+                    Menu & Info
+                  </a>
+                </p>
+                <p className="text-gray-700">
+                  <a href="https://web.dojo.app/create_booking/vendor/na4cS23Q_dbOflGtF_KvXOpSxC8lj5cSAinabhp8EaQ_restaurant" target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:underline">
+                    Book a Table
+                  </a>
                 </p>
               </div>
             </div>
@@ -71,7 +84,9 @@ const ContactSection = () => {
           </div>
           
           <Button className="w-full mt-8 bg-bright-orange hover:bg-orange-600">
-            Order Online Now
+            <a href="https://web.dojo.app/create_booking/vendor/na4cS23Q_dbOflGtF_KvXOpSxC8lj5cSAinabhp8EaQ_restaurant" target="_blank" rel="noopener noreferrer" className="w-full">
+              Book a Table Online
+            </a>
           </Button>
         </div>
       </div>
