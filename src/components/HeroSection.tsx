@@ -13,7 +13,7 @@ const HeroSection = () => {
   const slides = [
     {
       id: 1,
-      image: "/lovable-uploads/f9bd9af5-da24-4692-9919-14060ede9cd0.png",
+      image: "https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?q=80&w=1200",
       title: "Authentic Mexican Tacos",
       description: "Experience the vibrant flavors of traditional Mexican street food",
     },
