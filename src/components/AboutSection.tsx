@@ -11,8 +11,8 @@ const AboutSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <img 
-              src="https://scontent.cdninstagram.com/v/t51.2885-15/164318257_1594932387381524_1579917277862234088_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyIn0&_nc_ht=scontent.cdninstagram.com&_nc_cat=101&_nc_ohc=GoHGLG-e1W8AX-s2ubL&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MjU0MTM4MDQ0MDE3MDc3Mzk3Mw%3D%3D.2-ccb7-5&oh=00_AfCR5m1OrxTZ3g8CzKT6NwUhtY0eMI2pFLadQapkIj7X_w&oe=66AD37E7&_nc_sid=10d13b"
-              alt="Chucho's Tacos" 
+              src="/lovable-uploads/8d683bdc-68c1-4543-b273-abab4713875d.png"
+              alt="Chef at Chucho's Tacos" 
               className="rounded-lg shadow-md w-full h-auto"
             />
           </div>
