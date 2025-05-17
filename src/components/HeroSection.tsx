@@ -13,13 +13,13 @@ const HeroSection = () => {
   const slides = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?q=80&w=1200",
+      image: "/lovable-uploads/f9bd9af5-da24-4692-9919-14060ede9cd0.png",
       title: "Authentic Mexican Tacos",
       description: "Experience the vibrant flavors of traditional Mexican street food",
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=1200",
+      image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?q=80&w=1200",
       title: "Freshly Made Tacos",
       description: "Handcrafted with love and the finest ingredients",
     },
@@ -43,7 +43,7 @@ const HeroSection = () => {
                   alt={slide.title}
                   className="w-full h-full object-cover brightness-75"
                 />
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4 bg-gradient-to-t from-black/60 to-transparent">
                   {slide.id === 3 ? (
                     <div className="mb-4">
                       <Logo size="lg" />
