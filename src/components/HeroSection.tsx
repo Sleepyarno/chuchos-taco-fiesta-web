@@ -7,12 +7,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
+import Logo from "./Logo";
 
 const HeroSection = () => {
   const slides = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1615870216519-2f9fa575fa5c?q=80&w=1200",
+      image: "/lovable-uploads/c2ffb65a-eec2-4855-89fc-601453f89797.png",
       title: "Authentic Mexican Cuisine",
       description: "Experience the vibrant flavors of traditional Mexican street food",
     },
@@ -24,8 +25,8 @@ const HeroSection = () => {
     },
     {
       id: 3,
-      image: "https://images.unsplash.com/photo-1552332386-f0fd587f15a9?q=80&w=1200",
-      title: "Family Recipes",
+      image: "/lovable-uploads/e3a501a5-5fea-4b73-a20c-aa15a4ecb017.png",
+      title: "THE REAL MEXICAN FOOD",
       description: "Secret recipes passed down through generations",
     },
   ];
@@ -43,12 +44,20 @@ const HeroSection = () => {
                   className="w-full h-full object-cover brightness-75"
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
-                  <h2 className="text-4xl md:text-6xl font-bold mb-4 text-center shadow-text">
-                    {slide.title}
-                  </h2>
-                  <p className="text-xl md:text-2xl mb-8 max-w-2xl text-center shadow-text">
-                    {slide.description}
-                  </p>
+                  {slide.id === 3 ? (
+                    <div className="mb-4">
+                      <Logo size="lg" />
+                    </div>
+                  ) : (
+                    <>
+                      <h2 className="text-4xl md:text-6xl font-bold mb-4 text-center shadow-text">
+                        {slide.title}
+                      </h2>
+                      <p className="text-xl md:text-2xl mb-8 max-w-2xl text-center shadow-text">
+                        {slide.description}
+                      </p>
+                    </>
+                  )}
                   <div className="flex gap-4">
                     <Button className="bg-bright-orange hover:bg-orange-500 text-white">
                       Order Online

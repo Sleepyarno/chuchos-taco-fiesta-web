@@ -1,6 +1,5 @@
 
-import { Instagram, Mail, Globe } from "lucide-react";
-import { Facebook } from "lucide-react";
+import { Instagram, Mail, Globe, Facebook } from "lucide-react";
 
 const Footer = () => {
   return (
