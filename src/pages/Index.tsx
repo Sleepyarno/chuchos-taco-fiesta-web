@@ -27,7 +27,7 @@ const Index = () => {
       {/* Always show Admin link, but style it differently based on authentication */}
       <Link to="/admin">
         <Button 
-          className={`fixed bottom-4 right-4 ${
+          className={`fixed bottom-4 right-4 z-50 ${
             isAuthenticated() 
               ? "bg-bright-orange hover:bg-orange-600" 
               : "bg-gray-600 hover:bg-gray-700"

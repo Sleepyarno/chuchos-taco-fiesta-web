@@ -1,15 +1,16 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getGalleryData, updateGallery } from '@/utils/dataManager';
 import { useToast } from "@/components/ui/use-toast";
-import { Trash, Plus } from "lucide-react";
+import { Trash, Plus, Upload, Image } from "lucide-react";
 
 const GalleryEditor = () => {
   const [galleryData, setGalleryData] = useState(getGalleryData());
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
     updateGallery(galleryData);
@@ -43,6 +44,44 @@ const GalleryEditor = () => {
     setGalleryData({ ...galleryData, images: newImages });
   };
 
+  const handleFileUpload = (index: number) => {
+    if (fileInputRef.current) {
+      fileInputRef.current.dataset.imageIndex = index.toString();
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const imageIndex = fileInputRef.current?.dataset.imageIndex 
+      ? parseInt(fileInputRef.current.dataset.imageIndex)
+      : -1;
+    
+    if (imageIndex === -1) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        handleImageChange(imageIndex, 'src', event.target.result.toString());
+        // Also update alt text if it's the default
+        if (galleryData.images[imageIndex].alt === "New gallery image") {
+          handleImageChange(imageIndex, 'alt', file.name);
+        }
+        
+        toast({
+          title: "Image uploaded",
+          description: "Your image has been successfully uploaded",
+        });
+      }
+    };
+    reader.readAsDataURL(file);
+    
+    // Clear the input value so the same file can be selected again
+    e.target.value = '';
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -61,18 +100,40 @@ const GalleryEditor = () => {
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Gallery Images</h3>
           
+          {/* Hidden file input */}
+          <input 
+            type="file" 
+            ref={fileInputRef}
+            className="hidden" 
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {galleryData.images.map((image, index) => (
               <Card key={index} className="border border-border">
                 <CardContent className="pt-4 pb-2">
                   <div className="space-y-3">
                     <div>
-                      <label className="text-sm font-medium">Image URL</label>
+                      <div className="flex justify-between items-center mb-2">
+                        <label className="text-sm font-medium">Image</label>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => handleFileUpload(index)}
+                          className="flex items-center gap-2"
+                        >
+                          <Upload className="h-4 w-4" /> Upload
+                        </Button>
+                      </div>
+                      
                       <Input 
                         value={image.src} 
                         onChange={(e) => handleImageChange(index, 'src', e.target.value)}
                         className="mt-1"
+                        placeholder="Image URL or upload an image"
                       />
+                      
                       {image.src && (
                         <div className="mt-2">
                           <img 
@@ -83,6 +144,7 @@ const GalleryEditor = () => {
                         </div>
                       )}
                     </div>
+                    
                     <div>
                       <label className="text-sm font-medium">Alt Text</label>
                       <Input 
@@ -91,6 +153,7 @@ const GalleryEditor = () => {
                         className="mt-1"
                       />
                     </div>
+                    
                     <div>
                       <label className="text-sm font-medium">Caption</label>
                       <Input 
@@ -99,6 +162,7 @@ const GalleryEditor = () => {
                         className="mt-1"
                       />
                     </div>
+                    
                     <div className="flex justify-end">
                       <Button 
                         variant="destructive" 
