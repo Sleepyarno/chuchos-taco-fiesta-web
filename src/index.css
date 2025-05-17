@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,6 +50,13 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Chucho's Tacos Custom Colors */
+    --bright-orange: 24 95% 53%;
+    --vivid-purple: 262 85% 73%;
+    --dark-purple: 222 29% 14%;
+    --soft-gray: 0 0% 98%;
+    --soft-peach: 24 95% 91%;
   }
 
   .dark {
@@ -98,4 +106,9 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom styles */
+.shadow-text {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
