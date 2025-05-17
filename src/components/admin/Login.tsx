@@ -55,6 +55,9 @@ const Login = ({ onSuccess }: LoginProps) => {
           <CardDescription className="text-center">
             Enter your credentials to access the admin panel
           </CardDescription>
+          <CardDescription className="text-center font-medium text-bright-orange">
+            Default: admin / admin123
+          </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

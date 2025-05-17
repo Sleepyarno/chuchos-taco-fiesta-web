@@ -1,4 +1,3 @@
-
 import { Instagram, Mail, Globe, Facebook } from "lucide-react";
 import { getHoursData, getContactData } from "@/utils/dataManager";
 
@@ -7,7 +6,7 @@ const Footer = () => {
   const contactData = getContactData();
 
   return (
-    <footer className="bg-dark-purple text-white pt-12 pb-6">
+    <footer className="bg-dark-gray text-white py-8 mt-12">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
@@ -63,6 +62,13 @@ const Footer = () => {
               <Globe className="h-5 w-5" />
             </a>
           </div>
+        </div>
+        
+        {/* Admin Login Link */}
+        <div className="mt-6 text-center">
+          <a href="/admin" className="text-xs text-gray-400 hover:text-bright-orange transition-colors">
+            Admin Login
+          </a>
         </div>
       </div>
     </footer>

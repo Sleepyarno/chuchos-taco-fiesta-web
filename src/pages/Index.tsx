@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "@/utils/auth";
+import { LockIcon } from "lucide-react";
 
 const Index = () => {
   return (
@@ -22,13 +23,20 @@ const Index = () => {
         <ContactSection />
       </div>
       <Footer />
-      {isAuthenticated() && (
-        <Link to="/admin">
-          <Button className="fixed bottom-4 right-4 bg-bright-orange hover:bg-orange-600">
-            Admin Panel
-          </Button>
-        </Link>
-      )}
+      
+      {/* Always show Admin link, but style it differently based on authentication */}
+      <Link to="/admin">
+        <Button 
+          className={`fixed bottom-4 right-4 ${
+            isAuthenticated() 
+              ? "bg-bright-orange hover:bg-orange-600" 
+              : "bg-gray-600 hover:bg-gray-700"
+          }`}
+        >
+          <LockIcon className="h-4 w-4 mr-2" />
+          {isAuthenticated() ? "Admin Panel" : "Admin Login"}
+        </Button>
+      </Link>
     </div>
   );
 };
