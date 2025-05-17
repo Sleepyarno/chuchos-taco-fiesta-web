@@ -9,8 +9,24 @@ import { getMenuData, updateMenu } from '@/utils/dataManager';
 import { useToast } from "@/components/ui/use-toast";
 import { Trash, Plus } from "lucide-react";
 
+// Define the MenuItem type
+interface MenuItem {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+}
+
+// Define the MenuData type with an index signature
+interface MenuData {
+  categories: { id: string; name: string }[];
+  menuItems: {
+    [key: string]: MenuItem[]; // This adds the string index signature
+  };
+}
+
 const MenuEditor = () => {
-  const [menuData, setMenuData] = useState(getMenuData());
+  const [menuData, setMenuData] = useState<MenuData>(getMenuData() as MenuData);
   const [activeCategory, setActiveCategory] = useState(menuData.categories[0].id);
   const { toast } = useToast();
 
@@ -22,22 +38,22 @@ const MenuEditor = () => {
     });
   };
 
-  const handleItemChange = (categoryId: string, itemId: number, field: keyof (typeof menuData.menuItems)[typeof activeCategory][0], value: any) => {
+  const handleItemChange = (categoryId: string, itemId: number, field: keyof MenuItem, value: any) => {
     const newMenuData = {...menuData};
-    const itemIndex = newMenuData.menuItems[categoryId as keyof typeof menuData.menuItems].findIndex(item => item.id === itemId);
+    const itemIndex = newMenuData.menuItems[categoryId].findIndex(item => item.id === itemId);
     
     if (itemIndex !== -1) {
-      newMenuData.menuItems[categoryId as keyof typeof menuData.menuItems][itemIndex][field] = value;
+      newMenuData.menuItems[categoryId][itemIndex][field] = value;
       setMenuData(newMenuData);
     }
   };
 
   const addNewItem = (categoryId: string) => {
     const newMenuData = {...menuData};
-    const items = newMenuData.menuItems[categoryId as keyof typeof menuData.menuItems];
+    const items = newMenuData.menuItems[categoryId];
     const newId = items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1;
     
-    newMenuData.menuItems[categoryId as keyof typeof menuData.menuItems].push({
+    newMenuData.menuItems[categoryId].push({
       id: newId,
       name: "New Item",
       price: 0.00,
@@ -49,11 +65,11 @@ const MenuEditor = () => {
 
   const removeItem = (categoryId: string, itemId: number) => {
     const newMenuData = {...menuData};
-    const items = newMenuData.menuItems[categoryId as keyof typeof menuData.menuItems];
+    const items = newMenuData.menuItems[categoryId];
     const itemIndex = items.findIndex(item => item.id === itemId);
     
     if (itemIndex !== -1) {
-      newMenuData.menuItems[categoryId as keyof typeof menuData.menuItems].splice(itemIndex, 1);
+      newMenuData.menuItems[categoryId].splice(itemIndex, 1);
       setMenuData(newMenuData);
     }
   };
@@ -75,7 +91,7 @@ const MenuEditor = () => {
 
           {menuData.categories.map(category => (
             <TabsContent key={category.id} value={category.id} className="space-y-4">
-              {menuData.menuItems[category.id as keyof typeof menuData.menuItems].map(item => (
+              {menuData.menuItems[category.id].map(item => (
                 <Card key={item.id} className="border border-border">
                   <CardContent className="pt-4">
                     <div className="grid grid-cols-12 gap-4">
