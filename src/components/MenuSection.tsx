@@ -8,35 +8,51 @@ const MenuSection = () => {
   
   const categories = [
     { id: "tacos", name: "Tacos" },
-    { id: "burritos", name: "Burritos" },
+    { id: "quesadillas", name: "Quesadillas" },
+    { id: "tortas", name: "Tortas" },
+    { id: "platillos", name: "Platillos" },
     { id: "sides", name: "Sides" },
     { id: "drinks", name: "Drinks" },
   ];
   
   const menuItems = {
     tacos: [
-      { id: 1, name: "Carne Asada Taco", price: 3.99, description: "Grilled steak with onions and cilantro" },
-      { id: 2, name: "Al Pastor Taco", price: 3.99, description: "Marinated pork with pineapple, onions, and cilantro" },
-      { id: 3, name: "Pollo Taco", price: 3.50, description: "Grilled chicken with onions and cilantro" },
-      { id: 4, name: "Carnitas Taco", price: 3.99, description: "Slow-cooked pork with onions and cilantro" },
-      { id: 5, name: "Pescado Taco", price: 4.50, description: "Grilled fish with cabbage slaw and lime crema" },
-      { id: 6, name: "Vegetariano Taco", price: 3.50, description: "Grilled peppers, onions, and corn with guacamole" }
+      { id: 1, name: "Carne Asada Taco", price: 3.50, description: "Grilled marinated steak with cilantro and onions" },
+      { id: 2, name: "Al Pastor Taco", price: 3.50, description: "Marinated pork with pineapple, onions, and cilantro" },
+      { id: 3, name: "Carnitas Taco", price: 3.50, description: "Slow-cooked pork with onions and cilantro" },
+      { id: 4, name: "Barbacoa Taco", price: 3.50, description: "Slow-cooked beef with onions and cilantro" },
+      { id: 5, name: "Chicken Taco", price: 3.50, description: "Grilled marinated chicken with cilantro and onions" },
+      { id: 6, name: "Campechano Taco", price: 3.50, description: "Mix of steak and Mexican sausage" }
     ],
-    burritos: [
-      { id: 1, name: "Carne Asada Burrito", price: 9.99, description: "Grilled steak with rice, beans, cheese, and salsa" },
-      { id: 2, name: "Pollo Burrito", price: 8.99, description: "Grilled chicken with rice, beans, cheese, and salsa" },
-      { id: 3, name: "Bean & Cheese Burrito", price: 7.99, description: "Refried beans and cheese" }
+    quesadillas: [
+      { id: 1, name: "Quesadilla Asada", price: 9.99, description: "Flour tortilla with cheese and steak" },
+      { id: 2, name: "Quesadilla Al Pastor", price: 9.99, description: "Flour tortilla with cheese and marinated pork" },
+      { id: 3, name: "Quesadilla Pollo", price: 9.99, description: "Flour tortilla with cheese and chicken" },
+      { id: 4, name: "Quesadilla Carnitas", price: 9.99, description: "Flour tortilla with cheese and slow-cooked pork" }
+    ],
+    tortas: [
+      { id: 1, name: "Torta Asada", price: 10.99, description: "Mexican sandwich with steak, beans, cheese, and avocado" },
+      { id: 2, name: "Torta Al Pastor", price: 10.99, description: "Mexican sandwich with marinated pork, beans, cheese, and avocado" },
+      { id: 3, name: "Torta Pollo", price: 10.99, description: "Mexican sandwich with chicken, beans, cheese, and avocado" },
+      { id: 4, name: "Torta Milanesa", price: 10.99, description: "Mexican sandwich with breaded steak, beans, cheese, and avocado" }
+    ],
+    platillos: [
+      { id: 1, name: "Carne Asada Plate", price: 13.99, description: "Grilled steak with rice, beans, and tortillas" },
+      { id: 2, name: "Chicken Plate", price: 12.99, description: "Grilled chicken with rice, beans, and tortillas" },
+      { id: 3, name: "Combo Plate", price: 14.99, description: "Mix of meats with rice, beans, and tortillas" }
     ],
     sides: [
-      { id: 1, name: "Chips & Salsa", price: 3.99, description: "Freshly made tortilla chips with house salsa" },
-      { id: 2, name: "Guacamole", price: 4.99, description: "Fresh avocados with onions, cilantro, and lime" },
-      { id: 3, name: "Rice & Beans", price: 3.50, description: "Mexican rice and refried beans" }
+      { id: 1, name: "Chips & Salsa", price: 3.50, description: "House-made tortilla chips with fresh salsa" },
+      { id: 2, name: "Guacamole", price: 4.50, description: "Fresh avocado dip with chips" },
+      { id: 3, name: "Elote", price: 4.50, description: "Mexican street corn with mayo, cheese, and chile" },
+      { id: 4, name: "Rice & Beans", price: 3.50, description: "Mexican rice and refried beans" }
     ],
     drinks: [
       { id: 1, name: "Horchata", price: 2.99, description: "Sweet rice milk with cinnamon" },
       { id: 2, name: "Jamaica", price: 2.99, description: "Hibiscus flower tea" },
-      { id: 3, name: "Mexican Coke", price: 2.50, description: "Made with real cane sugar" },
-      { id: 4, name: "Jarritos", price: 2.50, description: "Assorted flavors" }
+      { id: 3, name: "Mexican Coke", price: 2.99, description: "Made with real cane sugar" },
+      { id: 4, name: "Jarritos", price: 2.99, description: "Assorted flavors" },
+      { id: 5, name: "Topo Chico", price: 2.50, description: "Sparkling mineral water" }
     ]
   };
 

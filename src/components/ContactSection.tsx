@@ -10,7 +10,7 @@ const ContactSection = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <div className="rounded-lg overflow-hidden shadow-lg">
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.1506559025957!2d-74.0060!3d40.7128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQ2LjEiTiA3NMKwMDAnMjEuNiJX!5e0!3m2!1sen!2sus!4v1621523789410!5m2!1sen!2sus" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3289.6245112282373!2d-97.06972488477802!3d32.7364202804119!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864e7d72a1f7a349%3A0xc0db8b89e8e35962!2sChucho&#39;s%20Tacos!5e0!3m2!1sen!2sus!4v1650473761659!5m2!1sen!2sus" 
             width="100%" 
             height="450" 
             style={{ border: 0 }} 
@@ -28,7 +28,11 @@ const ContactSection = () => {
               <MapPin className="h-6 w-6 text-bright-orange mr-4 mt-1" />
               <div>
                 <h4 className="font-bold text-lg">Address</h4>
-                <p className="text-gray-700">123 Taco Street<br />San Antonio, TX 78205</p>
+                <p className="text-gray-700">
+                  1215 E Pioneer Pkwy<br />
+                  Arlington, TX 76010<br />
+                  United States
+                </p>
               </div>
             </div>
             
@@ -36,7 +40,7 @@ const ContactSection = () => {
               <Phone className="h-6 w-6 text-bright-orange mr-4 mt-1" />
               <div>
                 <h4 className="font-bold text-lg">Phone</h4>
-                <p className="text-gray-700">(210) 555-1234</p>
+                <p className="text-gray-700">(817) 801-4962</p>
               </div>
             </div>
             
@@ -45,9 +49,10 @@ const ContactSection = () => {
               <div>
                 <h4 className="font-bold text-lg">Hours</h4>
                 <p className="text-gray-700">
-                  Monday - Thursday: 11am - 9pm<br />
-                  Friday - Saturday: 11am - 11pm<br />
-                  Sunday: 12pm - 8pm
+                  Monday - Thursday: 7am - 10pm<br />
+                  Friday: 7am - 12am<br />
+                  Saturday: 8am - 12am<br />
+                  Sunday: 8am - 10pm
                 </p>
               </div>
             </div>
@@ -58,7 +63,7 @@ const ContactSection = () => {
                 <a href="https://www.facebook.com/chuchostacos" target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:text-bright-orange transition-colors">
                   <Facebook className="h-8 w-8" />
                 </a>
-                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:text-bright-orange transition-colors">
+                <a href="https://www.instagram.com/chuchostacos/" target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:text-bright-orange transition-colors">
                   <Instagram className="h-8 w-8" />
                 </a>
               </div>
