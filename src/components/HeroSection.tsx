@@ -13,19 +13,19 @@ const HeroSection = () => {
   const slides = [
     {
       id: 1,
-      image: "/lovable-uploads/c2ffb65a-eec2-4855-89fc-601453f89797.png",
-      title: "Authentic Mexican Cuisine",
+      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?q=80&w=1200",
+      title: "Authentic Mexican Tacos",
       description: "Experience the vibrant flavors of traditional Mexican street food",
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200",
+      image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=1200",
       title: "Freshly Made Tacos",
       description: "Handcrafted with love and the finest ingredients",
     },
     {
       id: 3,
-      image: "/lovable-uploads/e3a501a5-5fea-4b73-a20c-aa15a4ecb017.png",
+      image: "https://images.unsplash.com/photo-1613514785940-daed07799d9b?q=80&w=1200",
       title: "THE REAL MEXICAN FOOD",
       description: "Secret recipes passed down through generations",
     },
