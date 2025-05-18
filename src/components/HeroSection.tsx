@@ -44,7 +44,10 @@ const HeroSection = () => {
                     <Button className="bg-bright-orange hover:bg-orange-500 text-white">
                       Order Online
                     </Button>
-                    <Button variant="outline" className="text-white border-white hover:bg-white/20">
+                    <Button 
+                      variant="secondary" 
+                      className="bg-white/20 text-white border-white hover:bg-white/30 shadow-sm"
+                    >
                       View Menu
                     </Button>
                   </div>
