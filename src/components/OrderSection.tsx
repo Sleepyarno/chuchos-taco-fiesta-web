@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { 
   Form,
   FormControl,
@@ -18,6 +17,7 @@ import { z } from "zod";
 import { toast } from "@/components/ui/sonner";
 import { Mail, Send } from "lucide-react";
 import { getMenuData } from "@/utils/dataManager";
+import emailjs from 'emailjs-com';
 
 // Create schema for order form validation
 const orderFormSchema = z.object({
@@ -28,6 +28,11 @@ const orderFormSchema = z.object({
 });
 
 type OrderFormValues = z.infer<typeof orderFormSchema>;
+
+// EmailJS configuration
+const EMAILJS_SERVICE_ID = "default_service"; // You'll need to replace this with your actual service ID
+const EMAILJS_TEMPLATE_ID = "order_template"; // You'll need to replace this with your actual template ID
+const EMAILJS_USER_ID = "your_user_id"; // You'll need to replace this with your actual user ID
 
 const OrderSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,12 +54,25 @@ const OrderSection = () => {
     setIsSubmitting(true);
     
     try {
-      // This would normally be an API endpoint that sends an email
-      // For now we'll simulate the API call and show a success message
-      console.log("Order submitted:", data);
+      // Prepare email template parameters
+      const templateParams = {
+        from_name: data.name,
+        from_email: data.email,
+        from_phone: data.phone,
+        message: data.order,
+        to_email: "chuchosbyker@gmail.com", // restaurant's email
+        reply_to: data.email,
+      };
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_USER_ID
+      );
+      
+      console.log("Email sent successfully:", response);
       
       // Show success message
       toast.success("Order submitted successfully!", {
