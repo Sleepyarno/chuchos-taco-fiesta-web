@@ -5,6 +5,7 @@ import MenuSection from "@/components/MenuSection";
 import AboutSection from "@/components/AboutSection";
 import ContactSection from "@/components/ContactSection";
 import GallerySection from "@/components/GallerySection";
+import OrderSection from "@/components/OrderSection";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
@@ -18,6 +19,7 @@ const Index = () => {
       <HeroSection />
       <div className="container mx-auto px-4">
         <MenuSection />
+        <OrderSection />
         <AboutSection />
         <GallerySection />
         <ContactSection />
