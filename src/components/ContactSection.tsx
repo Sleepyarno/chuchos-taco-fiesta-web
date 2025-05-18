@@ -1,6 +1,5 @@
 
 import { MapPin, Phone, Mail, Instagram, Globe, Facebook } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { getContactData } from "@/utils/dataManager";
 
 const ContactSection = () => {
@@ -66,7 +65,7 @@ const ContactSection = () => {
                   </a>
                 </p>
                 <p className="text-gray-700">
-                  <a href={contactData.bookingUrl} target="_blank" rel="noopener noreferrer" className="text-vivid-purple hover:underline">
+                  <a href="#booking" className="text-vivid-purple hover:underline">
                     Book a Table
                   </a>
                 </p>
@@ -85,12 +84,6 @@ const ContactSection = () => {
               </div>
             </div>
           </div>
-          
-          <Button className="w-full mt-8 bg-bright-orange hover:bg-orange-600">
-            <a href={contactData.bookingUrl} target="_blank" rel="noopener noreferrer" className="w-full">
-              Book a Table Online
-            </a>
-          </Button>
         </div>
       </div>
     </section>

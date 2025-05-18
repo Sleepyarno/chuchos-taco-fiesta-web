@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +17,7 @@ import { toast } from "@/components/ui/sonner";
 import { Mail, Send } from "lucide-react";
 import { getMenuData } from "@/utils/dataManager";
 import emailjs from 'emailjs-com';
+import { emailConfig } from "@/utils/emailConfig";
 
 // Create schema for order form validation
 const orderFormSchema = z.object({
@@ -28,11 +28,6 @@ const orderFormSchema = z.object({
 });
 
 type OrderFormValues = z.infer<typeof orderFormSchema>;
-
-// EmailJS configuration
-const EMAILJS_SERVICE_ID = "default_service"; // You'll need to replace this with your actual service ID
-const EMAILJS_TEMPLATE_ID = "order_template"; // You'll need to replace this with your actual template ID
-const EMAILJS_USER_ID = "your_user_id"; // You'll need to replace this with your actual user ID
 
 const OrderSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,10 +61,10 @@ const OrderSection = () => {
       
       // Send email using EmailJS
       const response = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
+        emailConfig.serviceId,
+        emailConfig.orderTemplateId,
         templateParams,
-        EMAILJS_USER_ID
+        emailConfig.userId
       );
       
       console.log("Email sent successfully:", response);
