@@ -10,9 +10,9 @@ const Navbar = () => {
   return (
     <nav className="bg-vivid-purple shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
-            <Logo size="sm" />
+            <Logo size="md" />
           </div>
           
           {/* Desktop menu */}
