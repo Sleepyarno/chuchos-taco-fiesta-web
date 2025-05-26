@@ -1,25 +1,24 @@
-
 {
   "title": "Our Food Gallery",
   "images": [
     {
-      "src": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?q=80&w=800",
-      "alt": "Various tacos on a plate",
+      "src": "/lovable-uploads/7cbe9c6a-9fd0-405b-9cd2-292374db3de2.png",
+      "alt": "Delicious looking taco",
       "caption": "Our authentic Mexican tacos"
     },
     {
-      "src": "https://images.unsplash.com/photo-1615870216519-2f9fa575fa5c?q=80&w=800",
-      "alt": "Street tacos",
+      "src": "/lovable-uploads/8d683bdc-68c1-4543-b273-abab4713875d.png",
+      "alt": "Another delicious taco",
       "caption": "Handmade street-style tacos"
     },
     {
-      "src": "https://images.unsplash.com/photo-1613514785940-daed07799d9b?q=80&w=800",
-      "alt": "Tacos with lime and salsa",
+      "src": "/lovable-uploads/c2ffb65a-eec2-4855-89fc-601453f89797.png",
+      "alt": "Tacos with fresh ingredients",
       "caption": "Freshly made salsas"
     },
     {
-      "src": "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=800",
-      "alt": "Colorful nachos",
+      "src": "/lovable-uploads/e3a501a5-5fea-4b73-a20c-aa15a4ecb017.png",
+      "alt": "Colorful plate of nachos",
       "caption": "Our loaded nachos"
     },
     {
@@ -28,8 +27,8 @@
       "caption": "Our refreshing signature cocktails"
     },
     {
-      "src": "https://images.unsplash.com/photo-1504544750208-dc0358e63f7f?q=80&w=800",
-      "alt": "Restaurant interior",
+      "src": "/lovable-uploads/f9bd9af5-da24-4692-9919-14060ede9cd0.png",
+      "alt": "Welcoming restaurant interior",
       "caption": "Our welcoming space"
     }
   ]
