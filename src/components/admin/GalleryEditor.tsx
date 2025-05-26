@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getGalleryData, updateGallery } from '@/utils/dataManager';
 import { useToast } from "@/components/ui/use-toast";
-import { Trash, Plus, Upload, Image } from "lucide-react";
+import { Trash, Plus, Upload } from "lucide-react"; // Removed Image as it's not used
+import { uploadImageLocally } from '@/utils/fileUploader';
 
 const GalleryEditor = () => {
   const [galleryData, setGalleryData] = useState(getGalleryData());
@@ -30,7 +31,7 @@ const GalleryEditor = () => {
     const newImages = [
       ...galleryData.images,
       {
-        src: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=800",
+        src: "/placeholder.svg", // Use placeholder image
         alt: "New gallery image",
         caption: "Add a caption for this image"
       }
@@ -51,7 +52,7 @@ const GalleryEditor = () => {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -61,22 +62,24 @@ const GalleryEditor = () => {
     
     if (imageIndex === -1) return;
     
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (event.target?.result) {
-        handleImageChange(imageIndex, 'src', event.target.result.toString());
-        // Also update alt text if it's the default
-        if (galleryData.images[imageIndex].alt === "New gallery image") {
-          handleImageChange(imageIndex, 'alt', file.name);
-        }
-        
-        toast({
-          title: "Image uploaded",
-          description: "Your image has been successfully uploaded",
-        });
-      }
-    };
-    reader.readAsDataURL(file);
+    try {
+      const objectUrl = await uploadImageLocally(file);
+      handleImageChange(imageIndex, 'src', objectUrl);
+      handleImageChange(imageIndex, 'alt', file.name); // Set alt text to original filename
+      
+      toast({
+        title: "Image Preview Updated",
+        description: "This is a temporary local preview. For permanent storage, a server-side upload is needed.",
+        duration: 7000, // Keep message longer
+      });
+    } catch (error) {
+      console.error("Error uploading image locally:", error);
+      toast({
+        title: "Upload Failed",
+        description: "Could not create local image preview.",
+        variant: "destructive",
+      });
+    }
     
     // Clear the input value so the same file can be selected again
     e.target.value = '';

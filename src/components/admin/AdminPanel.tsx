@@ -1,6 +1,17 @@
 
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { logout } from '@/utils/auth';
@@ -19,6 +30,7 @@ type AdminPanelProps = {
 
 const AdminPanel = ({ onLogout }: AdminPanelProps) => {
   const [activeTab, setActiveTab] = useState("menu");
+  const [editorKey, setEditorKey] = useState(0); // Key for re-rendering editors
   const { toast } = useToast();
 
   const handleLogout = () => {
@@ -27,15 +39,12 @@ const AdminPanel = ({ onLogout }: AdminPanelProps) => {
   };
 
   const handleResetData = () => {
-    if (window.confirm("Are you sure you want to reset all data to default? This action cannot be undone.")) {
-      resetAllData();
-      toast({
-        title: "Data reset",
-        description: "All content has been reset to default values",
-      });
-      // Reload the page to show the defaults
-      window.location.reload();
-    }
+    resetAllData();
+    toast({
+      title: "Data reset",
+      description: "All content has been reset to default values",
+    });
+    setEditorKey(prevKey => prevKey + 1); // Increment key to re-render editors
   };
 
   return (
@@ -44,13 +53,28 @@ const AdminPanel = ({ onLogout }: AdminPanelProps) => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl md:text-3xl font-bold">Chucho's Tacos Admin Panel</h1>
           <div className="space-x-2">
-            <Button 
-              variant="outline" 
-              onClick={handleResetData}
-              className="hidden sm:inline-flex"
-            >
-              Reset to Default
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="hidden sm:inline-flex"
+                >
+                  Reset to Default
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will reset all content data to its default values.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleResetData}>Confirm Reset</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             <Button 
               onClick={handleLogout}
               variant="outline"
@@ -71,38 +95,53 @@ const AdminPanel = ({ onLogout }: AdminPanelProps) => {
           </TabsList>
 
           <TabsContent value="menu">
-            <MenuEditor />
+            <MenuEditor key={`menu-${editorKey}`} />
           </TabsContent>
           
           <TabsContent value="hours">
-            <HoursEditor />
+            <HoursEditor key={`hours-${editorKey}`} />
           </TabsContent>
           
           <TabsContent value="contact">
-            <ContactEditor />
+            <ContactEditor key={`contact-${editorKey}`} />
           </TabsContent>
           
           <TabsContent value="hero">
-            <HeroEditor />
+            <HeroEditor key={`hero-${editorKey}`} />
           </TabsContent>
           
           <TabsContent value="about">
-            <AboutEditor />
+            <AboutEditor key={`about-${editorKey}`} />
           </TabsContent>
           
           <TabsContent value="gallery">
-            <GalleryEditor />
+            <GalleryEditor key={`gallery-${editorKey}`} />
           </TabsContent>
         </Tabs>
 
         <div className="sm:hidden mt-6">
-          <Button 
-            variant="outline" 
-            onClick={handleResetData}
-            className="w-full"
-          >
-            Reset to Default
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="w-full"
+              >
+                Reset to Default
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will reset all content data to its default values.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleResetData}>Confirm Reset</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </Card>
     </div>
