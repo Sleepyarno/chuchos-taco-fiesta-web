@@ -8,6 +8,40 @@ export const emailConfig = {
   userId: "YOUR_EMAILJS_USER_ID", // Your EmailJS public key
 };
 
+// Check if EmailJS is configured
+export const isEmailJSConfigured = (): boolean => {
+  return !!(
+    emailConfig.serviceId && 
+    emailConfig.serviceId !== "YOUR_EMAILJS_SERVICE_ID" &&
+    emailConfig.orderTemplateId && 
+    emailConfig.orderTemplateId !== "YOUR_ORDER_TEMPLATE_ID" &&
+    emailConfig.bookingTemplateId && 
+    emailConfig.bookingTemplateId !== "YOUR_BOOKING_TEMPLATE_ID" &&
+    emailConfig.userId && 
+    emailConfig.userId !== "YOUR_EMAILJS_USER_ID"
+  );
+};
+
+// Fallback email service for when EmailJS is not configured
+export const sendFallbackEmail = (data: any, type: 'order' | 'booking'): Promise<void> => {
+  return new Promise((resolve) => {
+    console.log(`${type.toUpperCase()} SUBMISSION (EmailJS not configured):`, data);
+    
+    // Create a mailto link as fallback
+    const subject = type === 'order' ? 'New Food Order' : 'New Table Booking';
+    const body = type === 'order' 
+      ? `Name: ${data.from_name}\nEmail: ${data.from_email}\nPhone: ${data.from_phone}\nOrder: ${data.message}`
+      : `Name: ${data.from_name}\nEmail: ${data.from_email}\nPhone: ${data.from_phone}\nDate: ${data.booking_date}\nTime: ${data.booking_time}\nPeople: ${data.number_of_people}\nRequests: ${data.special_requests}`;
+    
+    const mailtoUrl = `mailto:chuchosbyker@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    // Open default email client
+    window.open(mailtoUrl);
+    
+    resolve();
+  });
+};
+
 /*
 HOW TO SET UP EMAILJS:
 

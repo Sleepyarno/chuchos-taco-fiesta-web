@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getGalleryData, updateGallery } from '@/utils/dataManager';
 import { useToast } from "@/components/ui/use-toast";
-import { Trash, Plus, Upload } from "lucide-react"; // Removed Image as it's not used
-import { uploadImageLocally } from '@/utils/fileUploader';
+import { Trash, Plus, Upload } from "lucide-react";
+import { uploadImageLocally, cleanupUploadedImage } from '@/utils/fileUploader';
 
 const GalleryEditor = () => {
   const [galleryData, setGalleryData] = useState(getGalleryData());
@@ -31,7 +31,7 @@ const GalleryEditor = () => {
     const newImages = [
       ...galleryData.images,
       {
-        src: "/placeholder.svg", // Use placeholder image
+        src: "/placeholder.svg",
         alt: "New gallery image",
         caption: "Add a caption for this image"
       }
@@ -40,6 +40,13 @@ const GalleryEditor = () => {
   };
 
   const removeImage = (index: number) => {
+    const imageToRemove = galleryData.images[index];
+    
+    // Clean up uploaded image data if it's a blob URL
+    if (imageToRemove.src.startsWith('blob:')) {
+      cleanupUploadedImage(imageToRemove.src);
+    }
+    
     const newImages = [...galleryData.images];
     newImages.splice(index, 1);
     setGalleryData({ ...galleryData, images: newImages });
@@ -62,15 +69,33 @@ const GalleryEditor = () => {
     
     if (imageIndex === -1) return;
     
+    // Check file size (limit to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Please select an image smaller than 5MB.",
+        variant: "destructive",
+      });
+      e.target.value = '';
+      return;
+    }
+    
     try {
       const objectUrl = await uploadImageLocally(file);
+      
+      // Clean up previous image if it was a blob URL
+      const currentImage = galleryData.images[imageIndex];
+      if (currentImage.src.startsWith('blob:')) {
+        cleanupUploadedImage(currentImage.src);
+      }
+      
       handleImageChange(imageIndex, 'src', objectUrl);
-      handleImageChange(imageIndex, 'alt', file.name); // Set alt text to original filename
+      handleImageChange(imageIndex, 'alt', file.name.replace(/\.[^/.]+$/, "")); // Remove extension from alt text
       
       toast({
         title: "Image Preview Updated",
-        description: "This is a temporary local preview. For permanent storage, a server-side upload is needed.",
-        duration: 7000, // Keep message longer
+        description: "Image uploaded successfully. This is stored locally and will persist across browser sessions.",
+        duration: 5000,
       });
     } catch (error) {
       console.error("Error uploading image locally:", error);
@@ -143,6 +168,10 @@ const GalleryEditor = () => {
                             src={image.src} 
                             alt={image.alt} 
                             className="h-32 w-full object-cover rounded-md" 
+                            onError={(e) => {
+                              console.error('Image failed to load:', image.src);
+                              e.currentTarget.src = '/placeholder.svg';
+                            }}
                           />
                         </div>
                       )}
