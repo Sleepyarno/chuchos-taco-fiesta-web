@@ -8,7 +8,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-vivid-purple shadow-md sticky top-0 z-50">
+    <nav className="mexican-gradient shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
@@ -17,10 +17,10 @@ const Navbar = () => {
           
           {/* Desktop menu */}
           <div className="hidden md:flex space-x-4">
-            <a href="#menu" className="text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium">Menu</a>
-            <a href="#about" className="text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium">About Us</a>
-            <a href="#contact" className="text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium">Contact</a>
-            <Button variant="outline" className="bg-bright-orange text-white border-none hover:bg-orange-500 font-medium">Order Now</Button>
+            <a href="#menu" className="text-white hover:text-yellow-200 px-3 py-2 transition duration-300 font-medium shadow-text">Menu</a>
+            <a href="#about" className="text-white hover:text-yellow-200 px-3 py-2 transition duration-300 font-medium shadow-text">About Us</a>
+            <a href="#contact" className="text-white hover:text-yellow-200 px-3 py-2 transition duration-300 font-medium shadow-text">Contact</a>
+            <Button variant="outline" className="bg-white text-mexican-red border-none hover:bg-yellow-100 font-medium shadow-md">Order Now</Button>
           </div>
           
           {/* Mobile menu button */}
@@ -40,28 +40,28 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <a 
                 href="#menu" 
-                className="block text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium"
+                className="block text-white hover:text-yellow-200 px-3 py-2 transition duration-300 font-medium shadow-text"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Menu
               </a>
               <a 
                 href="#about" 
-                className="block text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium"
+                className="block text-white hover:text-yellow-200 px-3 py-2 transition duration-300 font-medium shadow-text"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About Us
               </a>
               <a 
                 href="#contact" 
-                className="block text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium"
+                className="block text-white hover:text-yellow-200 px-3 py-2 transition duration-300 font-medium shadow-text"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
               </a>
               <Button 
                 variant="outline" 
-                className="bg-bright-orange text-white border-none hover:bg-orange-500 w-full font-medium"
+                className="bg-white text-mexican-red border-none hover:bg-yellow-100 w-full font-medium shadow-md"
               >
                 Order Now
               </Button>
