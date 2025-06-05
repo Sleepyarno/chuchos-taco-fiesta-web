@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getGalleryData, updateGallery } from '@/utils/dataManager';
 import { useToast } from "@/components/ui/use-toast";
-import { Trash, Plus, Upload } from "lucide-react";
+import { Trash, Plus, Upload, Eye } from "lucide-react";
 import { uploadImageLocally, cleanupUploadedImage } from '@/utils/fileUploader';
 
 const GalleryEditor = () => {
@@ -18,6 +18,17 @@ const GalleryEditor = () => {
     toast({
       title: "Gallery updated",
       description: "The gallery has been successfully updated",
+    });
+  };
+
+  const handlePreview = () => {
+    // Save current changes first
+    updateGallery(galleryData);
+    // Open main site in new tab
+    window.open('/', '_blank');
+    toast({
+      title: "Preview opened",
+      description: "Gallery changes have been saved and preview opened in new tab",
     });
   };
 
@@ -101,12 +112,22 @@ const GalleryEditor = () => {
       }
       
       // Replace the current image with the new one
-      handleImageChange(imageIndex, 'src', objectUrl);
-      handleImageChange(imageIndex, 'alt', file.name.replace(/\.[^/.]+$/, "")); // Remove extension from alt text
+      const newImages = [...galleryData.images];
+      newImages[imageIndex] = {
+        ...newImages[imageIndex],
+        src: objectUrl,
+        alt: file.name.replace(/\.[^/.]+$/, "")
+      };
+      
+      const updatedGalleryData = { ...galleryData, images: newImages };
+      setGalleryData(updatedGalleryData);
+      
+      // Auto-save the changes
+      updateGallery(updatedGalleryData);
       
       toast({
         title: "Image Replaced Successfully",
-        description: `The image has been replaced with "${file.name}". This preview will persist across browser sessions.`,
+        description: `The image has been replaced with "${file.name}" and saved automatically.`,
         duration: 5000,
       });
     } catch (error) {
@@ -125,7 +146,24 @@ const GalleryEditor = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Gallery Editor</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle>Gallery Editor</CardTitle>
+          <div className="flex gap-2">
+            <Button 
+              onClick={handlePreview}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Eye className="h-4 w-4" /> Preview Customer View
+            </Button>
+            <Button 
+              onClick={handleSave}
+              className="bg-bright-orange hover:bg-orange-600"
+            >
+              Save Changes
+            </Button>
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
@@ -223,20 +261,13 @@ const GalleryEditor = () => {
             ))}
           </div>
           
-          <div className="flex justify-between">
+          <div className="flex justify-start">
             <Button 
               variant="outline" 
               onClick={addImage}
               className="mt-2"
             >
               <Plus className="h-4 w-4 mr-1" /> Add new image
-            </Button>
-            
-            <Button 
-              onClick={handleSave}
-              className="mt-2 bg-bright-orange hover:bg-orange-600"
-            >
-              Save Changes
             </Button>
           </div>
         </div>
