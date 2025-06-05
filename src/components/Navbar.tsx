@@ -17,10 +17,10 @@ const Navbar = () => {
           
           {/* Desktop menu */}
           <div className="hidden md:flex space-x-4">
-            <a href="#menu" className="text-white hover:text-soft-peach px-3 py-2 transition duration-300">Menu</a>
-            <a href="#about" className="text-white hover:text-soft-peach px-3 py-2 transition duration-300">About Us</a>
-            <a href="#contact" className="text-white hover:text-soft-peach px-3 py-2 transition duration-300">Contact</a>
-            <Button variant="outline" className="bg-bright-orange text-white border-none hover:bg-orange-500">Order Now</Button>
+            <a href="#menu" className="text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium">Menu</a>
+            <a href="#about" className="text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium">About Us</a>
+            <a href="#contact" className="text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium">Contact</a>
+            <Button variant="outline" className="bg-bright-orange text-white border-none hover:bg-orange-500 font-medium">Order Now</Button>
           </div>
           
           {/* Mobile menu button */}
@@ -40,28 +40,28 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <a 
                 href="#menu" 
-                className="block text-white hover:text-soft-peach px-3 py-2 transition duration-300"
+                className="block text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Menu
               </a>
               <a 
                 href="#about" 
-                className="block text-white hover:text-soft-peach px-3 py-2 transition duration-300"
+                className="block text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About Us
               </a>
               <a 
                 href="#contact" 
-                className="block text-white hover:text-soft-peach px-3 py-2 transition duration-300"
+                className="block text-white hover:text-soft-peach px-3 py-2 transition duration-300 font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
               </a>
               <Button 
                 variant="outline" 
-                className="bg-bright-orange text-white border-none hover:bg-orange-500 w-full"
+                className="bg-bright-orange text-white border-none hover:bg-orange-500 w-full font-medium"
               >
                 Order Now
               </Button>
