@@ -23,36 +23,25 @@ export const uploadImageLocally = (file: File): Promise<string> => {
       // This URL is temporary and valid only for the current browser session.
       const objectUrl = URL.createObjectURL(file);
       
-      // Store file data in localStorage for better persistence across page reloads
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64Data = reader.result as string;
-        const fileData = {
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          data: base64Data,
-          objectUrl: objectUrl,
-          timestamp: Date.now()
-        };
-        
-        // Store in localStorage with a unique key
-        const storageKey = `uploaded_image_${uniqueFilename}`;
-        try {
-          localStorage.setItem(storageKey, JSON.stringify(fileData));
-          console.log(`File data stored in localStorage with key: ${storageKey}`);
-        } catch (error) {
-          console.warn('Failed to store file data in localStorage:', error);
-        }
-        
-        resolve(objectUrl);
+      // Store minimal file data in localStorage to avoid quota issues
+      const fileData = {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        objectUrl: objectUrl,
+        timestamp: Date.now()
       };
       
-      reader.onerror = () => {
-        reject(new Error('Failed to read file'));
-      };
+      // Store in localStorage with a unique key (without the large base64 data)
+      const storageKey = `uploaded_image_${uniqueFilename}`;
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(fileData));
+        console.log(`File metadata stored in localStorage with key: ${storageKey}`);
+      } catch (error) {
+        console.warn('Failed to store file metadata in localStorage, but upload will still work:', error);
+      }
       
-      reader.readAsDataURL(file);
+      resolve(objectUrl);
     } catch (error) {
       reject(error);
     }

@@ -80,6 +80,17 @@ const GalleryEditor = () => {
       return;
     }
     
+    // Check if it's an image file
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file (PNG, JPG, GIF, etc.).",
+        variant: "destructive",
+      });
+      e.target.value = '';
+      return;
+    }
+    
     try {
       const objectUrl = await uploadImageLocally(file);
       
@@ -89,19 +100,20 @@ const GalleryEditor = () => {
         cleanupUploadedImage(currentImage.src);
       }
       
+      // Replace the current image with the new one
       handleImageChange(imageIndex, 'src', objectUrl);
       handleImageChange(imageIndex, 'alt', file.name.replace(/\.[^/.]+$/, "")); // Remove extension from alt text
       
       toast({
-        title: "Image Preview Updated",
-        description: "Image uploaded successfully. This is stored locally and will persist across browser sessions.",
+        title: "Image Replaced Successfully",
+        description: `The image has been replaced with "${file.name}". This preview will persist across browser sessions.`,
         duration: 5000,
       });
     } catch (error) {
       console.error("Error uploading image locally:", error);
       toast({
         title: "Upload Failed",
-        description: "Could not create local image preview.",
+        description: "Could not create local image preview. Please try again.",
         variant: "destructive",
       });
     }
@@ -151,7 +163,7 @@ const GalleryEditor = () => {
                           onClick={() => handleFileUpload(index)}
                           className="flex items-center gap-2"
                         >
-                          <Upload className="h-4 w-4" /> Upload
+                          <Upload className="h-4 w-4" /> Replace Image
                         </Button>
                       </div>
                       
@@ -159,7 +171,7 @@ const GalleryEditor = () => {
                         value={image.src} 
                         onChange={(e) => handleImageChange(index, 'src', e.target.value)}
                         className="mt-1"
-                        placeholder="Image URL or upload an image"
+                        placeholder="Image URL or click 'Replace Image' to upload"
                       />
                       
                       {image.src && (
