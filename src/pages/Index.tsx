@@ -28,13 +28,13 @@ const Index = () => {
       </div>
       <Footer />
       
-      {/* Always show Admin link, but style it differently based on authentication */}
+      {/* Always show Admin link with proper visibility */}
       <Link to="/admin">
         <Button 
-          className={`fixed bottom-4 right-4 z-50 ${
+          className={`fixed bottom-4 right-4 z-50 text-white shadow-lg ${
             isAuthenticated() 
               ? "bg-bright-orange hover:bg-orange-600" 
-              : "bg-gray-600 hover:bg-gray-700"
+              : "bg-gray-800 hover:bg-gray-700"
           }`}
         >
           <LockIcon className="h-4 w-4 mr-2" />
