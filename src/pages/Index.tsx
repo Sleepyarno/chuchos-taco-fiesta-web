@@ -31,10 +31,10 @@ const Index = () => {
       {/* Always show Admin link with proper visibility */}
       <Link to="/admin">
         <Button 
-          className={`fixed bottom-4 right-4 z-50 text-white shadow-lg ${
+          className={`fixed bottom-4 right-4 z-50 shadow-lg border-2 ${
             isAuthenticated() 
-              ? "bg-bright-orange hover:bg-orange-600" 
-              : "bg-gray-800 hover:bg-gray-700"
+              ? "bg-orange-500 hover:bg-orange-600 text-white border-orange-600" 
+              : "bg-gray-800 hover:bg-gray-700 text-white border-gray-600"
           }`}
         >
           <LockIcon className="h-4 w-4 mr-2" />
