@@ -7,6 +7,14 @@ import Logo from "./Logo";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const handleOrderNowClick = () => {
+    const orderSection = document.getElementById('order');
+    if (orderSection) {
+      orderSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
+
   return (
     <nav className="mexican-gradient shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
@@ -20,7 +28,13 @@ const Navbar = () => {
             <a href="#menu" className="text-white hover:text-yellow-200 px-3 py-2 transition duration-300 font-medium shadow-text">Menu</a>
             <a href="#about" className="text-white hover:text-yellow-200 px-3 py-2 transition duration-300 font-medium shadow-text">About Us</a>
             <a href="#contact" className="text-white hover:text-yellow-200 px-3 py-2 transition duration-300 font-medium shadow-text">Contact</a>
-            <Button variant="outline" className="bg-white text-mexican-red border-none hover:bg-yellow-100 font-medium shadow-md">Order Now</Button>
+            <Button 
+              variant="outline" 
+              className="bg-white text-mexican-red border-none hover:bg-yellow-100 font-medium shadow-md"
+              onClick={handleOrderNowClick}
+            >
+              Order Now
+            </Button>
           </div>
           
           {/* Mobile menu button */}
@@ -62,6 +76,7 @@ const Navbar = () => {
               <Button 
                 variant="outline" 
                 className="bg-white text-mexican-red border-none hover:bg-yellow-100 w-full font-medium shadow-md"
+                onClick={handleOrderNowClick}
               >
                 Order Now
               </Button>
