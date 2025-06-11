@@ -18,7 +18,7 @@ const App = () => {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light" storageKey="chucho-tacos-theme">
         <QueryClientProvider client={queryClient}>
-          <BrowserRouter basename="/chuchos-taco-fiesta-web">
+          <BrowserRouter>
             <TooltipProvider>
               <Toaster />
               <Sonner />
