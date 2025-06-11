@@ -1,0 +1,72 @@
+# A descriptive name for your workflow, which will appear in the Actions tab.
+name: Deploy static content to Pages
+
+# This section defines what events will trigger this workflow to run.
+on:
+  # Runs on any push to the "main" branch.
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  workflow_dispatch:
+
+# These are permissions that the workflow needs to interact with your repository.
+permissions:
+  contents: read      # Allows it to check out (read) your repository's code.
+  pages: write       # Allows it to create and manage the deployment on GitHub Pages.
+  id-token: write    # Allows it to authenticate with GitHub Pages.
+
+# This ensures that only one deployment runs at a time. If you push again while a deployment is running,
+# it will wait for the current one to finish before starting the new one.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+# This defines the "deploy" job, which contains all the steps to run.
+jobs:
+  deploy:
+    # Specifies that this job needs a GitHub Pages deployment environment.
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }} # This will display the live URL in the Actions log.
+    
+    # The type of virtual machine to run the job on. "ubuntu-latest" is a standard choice.
+    runs-on: ubuntu-latest
+    
+    # This is the sequence of steps the job will execute.
+    steps:
+      # Step 1: Checks out your repository's code so the workflow can access it.
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Step 2: Sets up the specific version of Node.js needed for your project.
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # Using Node.js version 20
+          cache: 'npm'      # Caches your npm dependencies for faster builds on subsequent runs.
+      
+      # Step 3: Installs all the project dependencies listed in your package.json file.
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Runs the build script from your package.json ("vite build").
+      # This is where Vite creates the final 'dist' directory.
+      - name: Build
+        run: npm run build
+
+      # Step 5: Configures GitHub Pages to accept the build artifact.
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # Step 6: Takes the build output and prepares it for deployment.
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Tell the action where to find the built website files.
+          path: './dist'
+
+      # Step 7: Deploys the uploaded artifact to GitHub Pages.
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
