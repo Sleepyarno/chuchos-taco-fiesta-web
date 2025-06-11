@@ -14,6 +14,8 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 const queryClient = new QueryClient();
 
 const App = () => {
+  console.log('App component rendering');
+  
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light" storageKey="chucho-tacos-theme">
