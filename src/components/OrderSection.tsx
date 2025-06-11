@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,7 +65,7 @@ const OrderSection = () => {
         // Send email using EmailJS
         const response = await emailjs.send(
           emailConfig.serviceId,
-          emailConfig.orderTemplateId,
+          emailConfig.templateId,
           templateParams,
           emailConfig.userId
         );
