@@ -13,6 +13,20 @@ import { getHeroData } from "@/utils/dataManager";
 const HeroSection = () => {
   const heroData = getHeroData();
 
+  const handleOrderOnlineClick = () => {
+    const orderSection = document.getElementById('order');
+    if (orderSection) {
+      orderSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleViewMenuClick = () => {
+    const menuSection = document.getElementById('menu');
+    if (menuSection) {
+      menuSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="relative">
       <Carousel className="w-full">
@@ -41,12 +55,16 @@ const HeroSection = () => {
                     </>
                   )}
                   <div className="flex gap-4">
-                    <Button className="bg-bright-orange hover:bg-orange-500 text-white">
+                    <Button 
+                      className="bg-bright-orange hover:bg-orange-500 text-white"
+                      onClick={handleOrderOnlineClick}
+                    >
                       Order Online
                     </Button>
                     <Button 
                       variant="secondary" 
                       className="bg-white/20 text-white border-white hover:bg-white/30 shadow-sm"
+                      onClick={handleViewMenuClick}
                     >
                       View Menu
                     </Button>
