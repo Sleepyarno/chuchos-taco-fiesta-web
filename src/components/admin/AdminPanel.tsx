@@ -23,6 +23,7 @@ import AboutEditor from './AboutEditor';
 import GalleryEditor from './GalleryEditor';
 import { resetAllData } from '@/utils/dataManager';
 import { useToast } from "@/components/ui/use-toast";
+import { Home, Eye } from "lucide-react";
 
 type AdminPanelProps = {
   onLogout: () => void;
@@ -30,7 +31,7 @@ type AdminPanelProps = {
 
 const AdminPanel = ({ onLogout }: AdminPanelProps) => {
   const [activeTab, setActiveTab] = useState("menu");
-  const [editorKey, setEditorKey] = useState(0); // Key for re-rendering editors
+  const [editorKey, setEditorKey] = useState(0);
   const { toast } = useToast();
 
   const handleLogout = () => {
@@ -44,15 +45,39 @@ const AdminPanel = ({ onLogout }: AdminPanelProps) => {
       title: "Data reset",
       description: "All content has been reset to default values",
     });
-    setEditorKey(prevKey => prevKey + 1); // Increment key to re-render editors
+    setEditorKey(prevKey => prevKey + 1);
+  };
+
+  const handleViewWebsite = () => {
+    window.open('/', '_blank');
+    toast({
+      title: "Website opened",
+      description: "The main website has opened in a new tab",
+    });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-bright-orange/10 to-vivid-purple/10 p-4 md:p-8">
       <Card className="max-w-7xl mx-auto p-4 md:p-6">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
           <h1 className="text-2xl md:text-3xl font-bold">Chucho's Tacos Admin Panel</h1>
-          <div className="space-x-2">
+          <div className="flex flex-wrap gap-2">
+            <Button 
+              onClick={handleViewWebsite}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Eye className="h-4 w-4" />
+              <span className="hidden sm:inline">View Website</span>
+            </Button>
+            <Button 
+              onClick={() => window.location.href = '/'}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Home className="h-4 w-4" />
+              <span className="hidden sm:inline">Back to Home</span>
+            </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button 
@@ -119,7 +144,7 @@ const AdminPanel = ({ onLogout }: AdminPanelProps) => {
           </TabsContent>
         </Tabs>
 
-        <div className="sm:hidden mt-6">
+        <div className="sm:hidden mt-6 space-y-2">
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button 
