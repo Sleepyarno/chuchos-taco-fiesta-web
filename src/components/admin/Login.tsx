@@ -7,6 +7,7 @@ import { authenticate, setAuthenticated } from '@/utils/auth';
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from 'react-router-dom';
 import { Home } from 'lucide-react';
+import ForgotPassword from './ForgotPassword';
 
 type LoginProps = {
   onSuccess: () => void;
@@ -16,6 +17,7 @@ const Login = ({ onSuccess }: LoginProps) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -49,6 +51,22 @@ const Login = ({ onSuccess }: LoginProps) => {
       setIsLoading(false);
     }
   };
+
+  if (showForgotPassword) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-bright-orange/20 to-vivid-purple/20 relative">
+        <Button 
+          className="absolute top-4 left-4 bg-bright-orange hover:bg-orange-600"
+          onClick={() => navigate('/')}
+        >
+          <Home className="h-4 w-4 mr-2" />
+          Back to Website
+        </Button>
+        
+        <ForgotPassword onBack={() => setShowForgotPassword(false)} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-bright-orange/20 to-vivid-purple/20 relative">
@@ -94,9 +112,17 @@ const Login = ({ onSuccess }: LoginProps) => {
               />
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col space-y-2">
             <Button type="submit" className="w-full bg-bright-orange hover:bg-orange-600" disabled={isLoading}>
               {isLoading ? "Logging in..." : "Sign In"}
+            </Button>
+            <Button
+              type="button"
+              variant="link"
+              className="text-sm text-muted-foreground"
+              onClick={() => setShowForgotPassword(true)}
+            >
+              Forgot your password?
             </Button>
           </CardFooter>
         </form>

@@ -17,7 +17,7 @@ import { toast } from "@/components/ui/sonner";
 import { Mail, Send } from "lucide-react";
 import { getMenuData } from "@/utils/dataManager";
 import emailjs from 'emailjs-com';
-import { emailConfig } from "@/utils/emailConfig";
+import { emailConfig, isEmailJSConfigured, sendFallbackEmail } from "@/utils/emailConfig";
 
 // Create schema for order form validation
 const orderFormSchema = z.object({
@@ -59,20 +59,29 @@ const OrderSection = () => {
         reply_to: data.email,
       };
       
-      // Send email using EmailJS
-      const response = await emailjs.send(
-        emailConfig.serviceId,
-        emailConfig.orderTemplateId,
-        templateParams,
-        emailConfig.userId
-      );
-      
-      console.log("Email sent successfully:", response);
-      
-      // Show success message
-      toast.success("Order submitted successfully!", {
-        description: "You will receive a confirmation email shortly.",
-      });
+      // Check if EmailJS is configured
+      if (isEmailJSConfigured()) {
+        // Send email using EmailJS
+        const response = await emailjs.send(
+          emailConfig.serviceId,
+          emailConfig.orderTemplateId,
+          templateParams,
+          emailConfig.userId
+        );
+        
+        console.log("Email sent successfully:", response);
+        
+        toast.success("Order submitted successfully!", {
+          description: "You will receive a confirmation email shortly.",
+        });
+      } else {
+        // Use fallback email service
+        await sendFallbackEmail(templateParams, 'order');
+        
+        toast.success("Order submitted!", {
+          description: "Your default email client will open to send the order. Please configure EmailJS for automatic email delivery.",
+        });
+      }
       
       // Reset form
       form.reset();
@@ -101,6 +110,15 @@ const OrderSection = () => {
             Fill out the form below to place your order. We'll confirm your order via email 
             and let you know when it will be ready for pickup.
           </p>
+
+          {!isEmailJSConfigured() && (
+            <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+              <p className="text-sm text-yellow-800">
+                <strong>Note:</strong> EmailJS is not configured. Orders will open your default email client.
+                To enable automatic email delivery, please configure EmailJS in the email settings.
+              </p>
+            </div>
+          )}
           
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
