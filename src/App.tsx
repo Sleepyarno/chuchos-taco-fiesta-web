@@ -14,7 +14,7 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 const queryClient = new QueryClient();
 
 const App = () => {
-  console.log('App component rendering');
+  console.log('App component rendering, current path:', window.location.pathname);
   
   return (
     <ErrorBoundary>
