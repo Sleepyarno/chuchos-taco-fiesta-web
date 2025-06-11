@@ -80,11 +80,11 @@ const GalleryEditor = () => {
     
     if (imageIndex === -1) return;
     
-    // Check file size (limit to 5MB for base64 storage)
-    if (file.size > 5 * 1024 * 1024) {
+    // Updated file size limit to 10MB
+    if (file.size > 10 * 1024 * 1024) {
       toast({
         title: "File too large",
-        description: "Please select an image smaller than 5MB.",
+        description: "Please select an image smaller than 10MB.",
         variant: "destructive",
       });
       e.target.value = '';
@@ -125,16 +125,17 @@ const GalleryEditor = () => {
       // Auto-save the changes
       updateGallery(updatedGalleryData);
       
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
       toast({
         title: "Image Replaced Successfully",
-        description: `The image has been replaced with "${file.name}" and saved automatically.`,
+        description: `The image "${file.name}" (${fileSizeMB}MB) has been processed and saved automatically.`,
         duration: 5000,
       });
     } catch (error) {
       console.error("Error uploading image locally:", error);
       toast({
         title: "Upload Failed",
-        description: "Could not process the image. Please try again with a smaller file.",
+        description: error instanceof Error ? error.message : "Could not process the image. Please try again with a smaller file.",
         variant: "destructive",
       });
     }
@@ -209,7 +210,7 @@ const GalleryEditor = () => {
                         value={image.src.startsWith('data:') ? 'Uploaded image (base64)' : image.src} 
                         onChange={(e) => handleImageChange(index, 'src', e.target.value)}
                         className="mt-1"
-                        placeholder="Image URL or click 'Replace Image' to upload"
+                        placeholder="Image URL or click 'Replace Image' to upload (max 10MB)"
                         disabled={image.src.startsWith('data:')}
                       />
                       
