@@ -39,7 +39,7 @@ const GallerySection = () => {
                 <img 
                   src={image.src}
                   alt={image.alt}
-                  className="w-full h-64 object-cover" 
+                  className="w-full h-80 object-cover" 
                   onError={(e) => {
                     console.error('Image failed to load:', image.src);
                     e.currentTarget.src = '/placeholder.svg';
