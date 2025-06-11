@@ -53,8 +53,8 @@ const GalleryEditor = () => {
   const removeImage = (index: number) => {
     const imageToRemove = galleryData.images[index];
     
-    // Clean up uploaded image data if it's a blob URL
-    if (imageToRemove.src.startsWith('blob:')) {
+    // Clean up uploaded image data
+    if (imageToRemove.src.startsWith('data:') || imageToRemove.src.startsWith('blob:')) {
       cleanupUploadedImage(imageToRemove.src);
     }
     
@@ -80,11 +80,11 @@ const GalleryEditor = () => {
     
     if (imageIndex === -1) return;
     
-    // Check file size (limit to 20MB)
-    if (file.size > 20 * 1024 * 1024) {
+    // Check file size (limit to 5MB for base64 storage)
+    if (file.size > 5 * 1024 * 1024) {
       toast({
         title: "File too large",
-        description: "Please select an image smaller than 20MB.",
+        description: "Please select an image smaller than 5MB.",
         variant: "destructive",
       });
       e.target.value = '';
@@ -103,11 +103,11 @@ const GalleryEditor = () => {
     }
     
     try {
-      const objectUrl = await uploadImageLocally(file);
+      const base64Data = await uploadImageLocally(file);
       
-      // Clean up previous image if it was a blob URL
+      // Clean up previous image if it was uploaded
       const currentImage = galleryData.images[imageIndex];
-      if (currentImage.src.startsWith('blob:')) {
+      if (currentImage.src.startsWith('data:') || currentImage.src.startsWith('blob:')) {
         cleanupUploadedImage(currentImage.src);
       }
       
@@ -115,7 +115,7 @@ const GalleryEditor = () => {
       const newImages = [...galleryData.images];
       newImages[imageIndex] = {
         ...newImages[imageIndex],
-        src: objectUrl,
+        src: base64Data,
         alt: file.name.replace(/\.[^/.]+$/, "")
       };
       
@@ -134,7 +134,7 @@ const GalleryEditor = () => {
       console.error("Error uploading image locally:", error);
       toast({
         title: "Upload Failed",
-        description: "Could not create local image preview. Please try again.",
+        description: "Could not process the image. Please try again with a smaller file.",
         variant: "destructive",
       });
     }
@@ -206,10 +206,11 @@ const GalleryEditor = () => {
                       </div>
                       
                       <Input 
-                        value={image.src} 
+                        value={image.src.startsWith('data:') ? 'Uploaded image (base64)' : image.src} 
                         onChange={(e) => handleImageChange(index, 'src', e.target.value)}
                         className="mt-1"
                         placeholder="Image URL or click 'Replace Image' to upload"
+                        disabled={image.src.startsWith('data:')}
                       />
                       
                       {image.src && (

@@ -1,47 +1,45 @@
 
 /**
- * Enhanced image upload utility with improved persistence.
+ * Enhanced image upload utility that converts images to base64 for better persistence.
  * 
- * IMPORTANT: This is still a temporary solution for local preview only. 
- * In a real application, you would need a server-side upload mechanism 
- * to permanently store the image and get a persistent URL.
- * 
- * @param file The image file to "upload".
- * @returns A Promise that resolves with an object URL for the image.
+ * IMPORTANT: This stores images as base64 in localStorage for persistence.
+ * In a production application, you would upload to a proper file storage service.
  */
 export const uploadImageLocally = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     try {
-      const uniqueFilename = Date.now() + '-' + file.name;
-      // This path is where the file would ideally be stored on a server.
-      const targetPath = `/lovable-uploads/${uniqueFilename}`; 
+      const reader = new FileReader();
       
-      console.log(`Simulating upload for: ${file.name}`);
-      console.log(`Generated target path (for reference): ${targetPath}`);
-
-      // Create an object URL for local preview.
-      // This URL is temporary and valid only for the current browser session.
-      const objectUrl = URL.createObjectURL(file);
-      
-      // Store minimal file data in localStorage to avoid quota issues
-      const fileData = {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        objectUrl: objectUrl,
-        timestamp: Date.now()
+      reader.onload = (event) => {
+        const result = event.target?.result;
+        if (typeof result === 'string') {
+          // Store the base64 data directly
+          const uniqueKey = `image_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          
+          try {
+            // Store the base64 data in localStorage for persistence
+            localStorage.setItem(uniqueKey, result);
+            console.log(`Image stored with key: ${uniqueKey}`);
+            
+            // Return the base64 data directly as the src
+            resolve(result);
+          } catch (error) {
+            console.warn('Failed to store image in localStorage:', error);
+            // Still return the base64 data even if storage fails
+            resolve(result);
+          }
+        } else {
+          reject(new Error('Failed to read file as base64'));
+        }
       };
       
-      // Store in localStorage with a unique key (without the large base64 data)
-      const storageKey = `uploaded_image_${uniqueFilename}`;
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(fileData));
-        console.log(`File metadata stored in localStorage with key: ${storageKey}`);
-      } catch (error) {
-        console.warn('Failed to store file metadata in localStorage, but upload will still work:', error);
-      }
+      reader.onerror = () => {
+        reject(new Error('Failed to read file'));
+      };
       
-      resolve(objectUrl);
+      // Read the file as base64
+      reader.readAsDataURL(file);
+      
     } catch (error) {
       reject(error);
     }
@@ -49,21 +47,16 @@ export const uploadImageLocally = (file: File): Promise<string> => {
 };
 
 /**
- * Cleanup function to revoke object URLs and remove stored data
- * Call this when removing images from the gallery
+ * Cleanup function for removing stored images
  */
 export const cleanupUploadedImage = (imageUrl: string): void => {
-  if (imageUrl.startsWith('blob:')) {
-    URL.revokeObjectURL(imageUrl);
-  }
-  
   // Clean up localStorage entries for this image
   const keys = Object.keys(localStorage);
   keys.forEach(key => {
-    if (key.startsWith('uploaded_image_')) {
+    if (key.startsWith('image_')) {
       try {
-        const data = JSON.parse(localStorage.getItem(key) || '');
-        if (data.objectUrl === imageUrl) {
+        const storedData = localStorage.getItem(key);
+        if (storedData === imageUrl) {
           localStorage.removeItem(key);
           console.log(`Cleaned up stored data for key: ${key}`);
         }
@@ -72,4 +65,9 @@ export const cleanupUploadedImage = (imageUrl: string): void => {
       }
     }
   });
+  
+  // If it's a blob URL, revoke it as well
+  if (imageUrl.startsWith('blob:')) {
+    URL.revokeObjectURL(imageUrl);
+  }
 };
