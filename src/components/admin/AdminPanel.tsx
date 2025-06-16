@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +20,7 @@ import HoursEditor from './HoursEditor';
 import HeroEditor from './HeroEditor';
 import AboutEditor from './AboutEditor';
 import GalleryEditor from './GalleryEditor';
+import PaymentEditor from './PaymentEditor';
 import { resetAllData } from '@/utils/dataManager';
 import { useToast } from "@/components/ui/use-toast";
 import { Home, Eye } from "lucide-react";
@@ -117,6 +117,7 @@ const AdminPanel = ({ onLogout }: AdminPanelProps) => {
             <TabsTrigger value="hero" className="flex-grow">Hero</TabsTrigger>
             <TabsTrigger value="about" className="flex-grow">About</TabsTrigger>
             <TabsTrigger value="gallery" className="flex-grow">Gallery</TabsTrigger>
+            <TabsTrigger value="payment" className="flex-grow">Payment</TabsTrigger>
           </TabsList>
 
           <TabsContent value="menu">
@@ -141,6 +142,10 @@ const AdminPanel = ({ onLogout }: AdminPanelProps) => {
           
           <TabsContent value="gallery">
             <GalleryEditor key={`gallery-${editorKey}`} />
+          </TabsContent>
+          
+          <TabsContent value="payment">
+            <PaymentEditor key={`payment-${editorKey}`} />
           </TabsContent>
         </Tabs>
 

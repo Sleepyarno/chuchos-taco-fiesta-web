@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +32,10 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import emailjs from 'emailjs-com';
 import { emailConfig } from "@/utils/emailConfig";
+import PaymentModal from '@/components/payment/PaymentModal';
+import { PaymentRequest } from '@/types/payment';
+import { paymentConfig, bookingDepositConfig } from '@/utils/paymentConfig';
+import { CreditCard } from 'lucide-react';
 
 // Create schema for booking form validation
 const bookingFormSchema = z.object({
@@ -59,6 +62,8 @@ const peopleOptions = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
 
 const BookingSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [currentPaymentRequest, setCurrentPaymentRequest] = useState<PaymentRequest | null>(null);
   
   // Initialize the form
   const form = useForm<BookingFormValues>({
@@ -70,6 +75,91 @@ const BookingSection = () => {
       specialRequests: "",
     },
   });
+
+  const handleBookingSubmit = async (data: BookingFormValues) => {
+    if (bookingDepositConfig.enabled) {
+      // Create payment request for deposit
+      const paymentRequest: PaymentRequest = {
+        orderId: `booking_${Date.now()}`,
+        amount: bookingDepositConfig.amount,
+        currency: paymentConfig.currency,
+        items: [{
+          id: 'booking_deposit',
+          name: bookingDepositConfig.description,
+          price: bookingDepositConfig.amount,
+          quantity: 1,
+          notes: `Table for ${data.people} people on ${format(data.date, "PPP")} at ${data.time}`
+        }],
+        customer: {
+          name: data.name,
+          email: data.email,
+          phone: data.phone
+        },
+        type: 'booking_deposit',
+        metadata: {
+          bookingDate: format(data.date, "PPP"),
+          bookingTime: data.time,
+          numberOfPeople: data.people,
+          specialRequests: data.specialRequests,
+          submittedAt: new Date().toISOString()
+        }
+      };
+
+      setCurrentPaymentRequest(paymentRequest);
+      setShowPaymentModal(true);
+    } else {
+      // Process booking without payment
+      await handleEmailOnlySubmit(data);
+    }
+  };
+
+  const handlePaymentSuccess = async (transactionId: string) => {
+    if (!currentPaymentRequest) return;
+
+    try {
+      const templateParams = {
+        from_name: currentPaymentRequest.customer.name,
+        from_email: currentPaymentRequest.customer.email,
+        from_phone: currentPaymentRequest.customer.phone,
+        booking_date: currentPaymentRequest.metadata?.bookingDate,
+        booking_time: currentPaymentRequest.metadata?.bookingTime,
+        number_of_people: currentPaymentRequest.metadata?.numberOfPeople,
+        special_requests: currentPaymentRequest.metadata?.specialRequests || "None",
+        deposit_amount: `£${currentPaymentRequest.amount.toFixed(2)}`,
+        transaction_id: transactionId,
+        to_email: "chuchosbyker@gmail.com",
+        reply_to: currentPaymentRequest.customer.email,
+      };
+      
+      const response = await emailjs.send(
+        emailConfig.serviceId,
+        emailConfig.bookingTemplateId,
+        templateParams,
+        emailConfig.userId
+      );
+      
+      console.log("Booking confirmation sent successfully:", response);
+      
+      toast.success("Table booked successfully!", {
+        description: `Deposit paid (£${bookingDepositConfig.amount}). You'll receive a confirmation email shortly.`,
+      });
+      
+      form.reset();
+      setCurrentPaymentRequest(null);
+    } catch (error) {
+      console.error("Error sending booking confirmation:", error);
+      toast.error("Booking successful but confirmation failed", {
+        description: "Please contact us with your transaction ID: " + transactionId,
+      });
+    }
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast.error("Booking deposit payment failed", {
+      description: error,
+    });
+    setCurrentPaymentRequest(null);
+  };
 
   // Handle form submission
   const onSubmit = async (data: BookingFormValues) => {
@@ -89,7 +179,6 @@ const BookingSection = () => {
         reply_to: data.email,
       };
       
-      // Send email using EmailJS
       const response = await emailjs.send(
         emailConfig.serviceId,
         emailConfig.bookingTemplateId,
@@ -115,6 +204,46 @@ const BookingSection = () => {
       setIsSubmitting(false);
     }
   };
+  
+  const handleEmailOnlySubmit = async (data: BookingFormValues) => {
+    setIsSubmitting(true);
+    
+    try {
+      const templateParams = {
+        from_name: data.name,
+        from_email: data.email,
+        from_phone: data.phone,
+        booking_date: format(data.date, "PPP"),
+        booking_time: data.time,
+        number_of_people: data.people,
+        special_requests: data.specialRequests || "None",
+        to_email: "chuchosbyker@gmail.com",
+        reply_to: data.email,
+      };
+      
+      const response = await emailjs.send(
+        emailConfig.serviceId,
+        emailConfig.bookingTemplateId,
+        templateParams,
+        emailConfig.userId
+      );
+      
+      console.log("Booking email sent successfully:", response);
+      
+      toast.success("Table booked successfully!", {
+        description: "You will receive a confirmation email shortly.",
+      });
+      
+      form.reset();
+    } catch (error) {
+      console.error("Error booking table:", error);
+      toast.error("Failed to book table", {
+        description: "Please try again later or contact us directly.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="booking" className="py-16">
@@ -127,13 +256,17 @@ const BookingSection = () => {
         </div>
         
         <p className="mb-6 text-gray-700">
-          Complete the form below to book a table at Chucho's Tacos. We'll confirm your 
-          reservation via email. For large groups (more than 12 people) or special events,
-          please call us directly.
+          Complete the form below to book a table at Chucho's Tacos. 
+          {bookingDepositConfig.enabled && (
+            <span className="font-medium text-vivid-purple">
+              {' '}A refundable £{bookingDepositConfig.amount} deposit is required to secure your booking.
+            </span>
+          )}
+          {' '}We'll confirm your reservation via email. For large groups (more than 12 people) or special events, please call us directly.
         </p>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
@@ -287,13 +420,40 @@ const BookingSection = () => {
               )}
             />
             
-            <Button 
-              type="submit" 
-              className="w-full bg-bright-orange hover:bg-orange-600"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "Book Table"}
-            </Button>
+            <div className="flex gap-2">
+              {bookingDepositConfig.enabled ? (
+                <>
+                  <Button 
+                    type="button"
+                    onClick={form.handleSubmit(handleBookingSubmit)}
+                    className="flex-1 bg-bright-orange hover:bg-orange-600"
+                    disabled={isSubmitting}
+                  >
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    {isSubmitting ? "Processing..." : `Book with £${bookingDepositConfig.amount} Deposit`}
+                  </Button>
+                  
+                  <Button 
+                    type="button"
+                    onClick={form.handleSubmit(handleEmailOnlySubmit)}
+                    variant="outline"
+                    className="flex-1"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Submitting..." : "Book without Deposit"}
+                  </Button>
+                </>
+              ) : (
+                <Button 
+                  type="button"
+                  onClick={form.handleSubmit(handleEmailOnlySubmit)}
+                  className="w-full bg-bright-orange hover:bg-orange-600"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Book Table"}
+                </Button>
+              )}
+            </div>
           </form>
         </Form>
         
@@ -303,6 +463,20 @@ const BookingSection = () => {
           </p>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      {currentPaymentRequest && (
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => {
+            setShowPaymentModal(false);
+            setCurrentPaymentRequest(null);
+          }}
+          paymentRequest={currentPaymentRequest}
+          onSuccess={handlePaymentSuccess}
+          onError={handlePaymentError}
+        />
+      )}
     </section>
   );
 };

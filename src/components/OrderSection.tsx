@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,10 +14,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "@/components/ui/sonner";
-import { Mail, Send } from "lucide-react";
+import { Mail, Send, CreditCard } from "lucide-react";
 import { getMenuData } from "@/utils/dataManager";
 import emailjs from 'emailjs-com';
 import { emailConfig, isEmailJSConfigured, sendFallbackEmail } from "@/utils/emailConfig";
+import PaymentModal from '@/components/payment/PaymentModal';
+import { PaymentRequest, OrderItem } from '@/types/payment';
+import { paymentConfig } from '@/utils/paymentConfig';
 
 // Create schema for order form validation
 const orderFormSchema = z.object({
@@ -32,6 +34,8 @@ type OrderFormValues = z.infer<typeof orderFormSchema>;
 
 const OrderSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [currentPaymentRequest, setCurrentPaymentRequest] = useState<PaymentRequest | null>(null);
   const menuData = getMenuData();
   
   // Initialize the form
@@ -45,24 +49,154 @@ const OrderSection = () => {
     },
   });
 
+  // Parse order text into items for payment
+  const parseOrderItems = (orderText: string): OrderItem[] => {
+    const lines = orderText.split('\n').filter(line => line.trim());
+    const items: OrderItem[] = [];
+    let itemId = 1;
+
+    for (const line of lines) {
+      // Simple parsing - look for quantity and item name
+      const match = line.match(/(\d+)\s*x?\s*(.+?)(?:\s*[-–]\s*£?(\d+\.?\d*))?/i);
+      if (match) {
+        const [, qty, name, priceStr] = match;
+        const quantity = parseInt(qty) || 1;
+        const price = priceStr ? parseFloat(priceStr) : 8.50; // Default price
+        
+        items.push({
+          id: `item_${itemId++}`,
+          name: name.trim(),
+          price,
+          quantity,
+          notes: line.includes('no') || line.includes('without') ? line : undefined
+        });
+      } else if (line.trim()) {
+        // If no quantity specified, assume 1
+        items.push({
+          id: `item_${itemId++}`,
+          name: line.trim(),
+          price: 8.50, // Default price
+          quantity: 1
+        });
+      }
+    }
+
+    return items.length > 0 ? items : [{
+      id: 'custom_order',
+      name: 'Custom Order',
+      price: 15.00,
+      quantity: 1,
+      notes: orderText
+    }];
+  };
+
   // Handle form submission
-  const onSubmit = async (data: OrderFormValues) => {
+  const handleOrderSubmit = async (data: OrderFormValues) => {
     setIsSubmitting(true);
     
     try {
-      // Prepare email template parameters
+      // Parse order items for payment
+      const orderItems = parseOrderItems(data.order);
+      const totalAmount = orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
+      // Create payment request
+      const paymentRequest: PaymentRequest = {
+        orderId: `order_${Date.now()}`,
+        amount: totalAmount,
+        currency: paymentConfig.currency,
+        items: orderItems,
+        customer: {
+          name: data.name,
+          email: data.email,
+          phone: data.phone
+        },
+        type: 'order',
+        metadata: {
+          originalOrderText: data.order,
+          submittedAt: new Date().toISOString()
+        }
+      };
+
+      setCurrentPaymentRequest(paymentRequest);
+      setShowPaymentModal(true);
+    } catch (error) {
+      console.error("Error preparing order:", error);
+      toast.error("Failed to prepare order", {
+        description: "Please try again later or contact us directly.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePaymentSuccess = async (transactionId: string) => {
+    if (!currentPaymentRequest) return;
+
+    try {
+      // Send confirmation email with payment details
+      const templateParams = {
+        from_name: currentPaymentRequest.customer.name,
+        from_email: currentPaymentRequest.customer.email,
+        from_phone: currentPaymentRequest.customer.phone,
+        message: currentPaymentRequest.metadata?.originalOrderText || 'Custom order',
+        order_total: `£${currentPaymentRequest.amount.toFixed(2)}`,
+        transaction_id: transactionId,
+        to_email: "chuchosbyker@gmail.com",
+        reply_to: currentPaymentRequest.customer.email,
+      };
+      
+      if (isEmailJSConfigured()) {
+        await emailjs.send(
+          emailConfig.serviceId,
+          emailConfig.templateId,
+          templateParams,
+          emailConfig.userId
+        );
+        
+        toast.success("Order confirmed!", {
+          description: "Payment successful. You'll receive a confirmation email shortly.",
+        });
+      } else {
+        await sendFallbackEmail(templateParams, 'order');
+        
+        toast.success("Order confirmed!", {
+          description: "Payment successful. Your default email client will open for confirmation.",
+        });
+      }
+      
+      // Reset form
+      form.reset();
+      setCurrentPaymentRequest(null);
+    } catch (error) {
+      console.error("Error sending confirmation:", error);
+      toast.error("Payment successful but confirmation failed", {
+        description: "Please contact us with your transaction ID: " + transactionId,
+      });
+    }
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast.error("Payment failed", {
+      description: error,
+    });
+    setCurrentPaymentRequest(null);
+  };
+
+  // Handle form submission for email only
+  const handleEmailOnlySubmit = async (data: OrderFormValues) => {
+    setIsSubmitting(true);
+    
+    try {
       const templateParams = {
         from_name: data.name,
         from_email: data.email,
         from_phone: data.phone,
         message: data.order,
-        to_email: "chuchosbyker@gmail.com", // restaurant's email
+        to_email: "chuchosbyker@gmail.com",
         reply_to: data.email,
       };
       
-      // Check if EmailJS is configured
       if (isEmailJSConfigured()) {
-        // Send email using EmailJS
         const response = await emailjs.send(
           emailConfig.serviceId,
           emailConfig.templateId,
@@ -76,7 +210,6 @@ const OrderSection = () => {
           description: "You will receive a confirmation email shortly.",
         });
       } else {
-        // Use fallback email service
         await sendFallbackEmail(templateParams, 'order');
         
         toast.success("Order submitted!", {
@@ -84,7 +217,6 @@ const OrderSection = () => {
         });
       }
       
-      // Reset form
       form.reset();
     } catch (error) {
       console.error("Error submitting order:", error);
@@ -108,8 +240,8 @@ const OrderSection = () => {
           </div>
           
           <p className="mb-6 text-gray-700">
-            Fill out the form below to place your order. We'll confirm your order via email 
-            and let you know when it will be ready for pickup.
+            Fill out the form below to place your order. Choose to pay online for faster processing
+            or submit for email confirmation.
           </p>
 
           {!isEmailJSConfigured() && (
@@ -122,7 +254,7 @@ const OrderSection = () => {
           )}
           
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form className="space-y-6">
               <FormField
                 control={form.control}
                 name="name"
@@ -183,14 +315,28 @@ const OrderSection = () => {
                 )}
               />
               
-              <Button 
-                type="submit" 
-                className="w-full bg-bright-orange hover:bg-orange-600"
-                disabled={isSubmitting}
-              >
-                <Send className="h-4 w-4 mr-2" />
-                {isSubmitting ? "Sending..." : "Place Order"}
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  type="button"
+                  onClick={form.handleSubmit(handleOrderSubmit)}
+                  className="flex-1 bg-bright-orange hover:bg-orange-600"
+                  disabled={isSubmitting}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  {isSubmitting ? "Processing..." : "Order & Pay"}
+                </Button>
+                
+                <Button 
+                  type="button"
+                  onClick={form.handleSubmit(handleEmailOnlySubmit)}
+                  variant="outline"
+                  className="flex-1"
+                  disabled={isSubmitting}
+                >
+                  <Send className="h-4 w-4 mr-2" />
+                  {isSubmitting ? "Sending..." : "Email Only"}
+                </Button>
+              </div>
             </form>
           </Form>
           
@@ -230,6 +376,20 @@ const OrderSection = () => {
           </div>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      {currentPaymentRequest && (
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => {
+            setShowPaymentModal(false);
+            setCurrentPaymentRequest(null);
+          }}
+          paymentRequest={currentPaymentRequest}
+          onSuccess={handlePaymentSuccess}
+          onError={handlePaymentError}
+        />
+      )}
     </section>
   );
 };
