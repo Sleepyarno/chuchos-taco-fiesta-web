@@ -9,13 +9,13 @@
 // 6. Update the values below
 
 export const emailConfig = {
-  serviceId: 'default_service', // Replace with your EmailJS service ID
-  templateId: 'template_order', // Replace with your EmailJS template ID for orders
-  bookingTemplateId: 'template_booking', // Replace with your EmailJS template ID for bookings
+  serviceId: 'service_mexicano', // EmailJS service ID
+  templateId: 'template_order_mexicano', // EmailJS template ID for orders
+  bookingTemplateId: 'template_booking_mexicano', // EmailJS template ID for bookings
   userId: 'sleepyarno@gmail.com', // Your EmailJS user ID (public key)
   
   // Set to true when EmailJS is properly configured
-  isConfigured: false // Change to true after setting up EmailJS
+  isConfigured: true // EmailJS is now configured
 };
 
 // Check if EmailJS is configured
