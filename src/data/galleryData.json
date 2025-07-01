@@ -28,8 +28,8 @@
       "caption": "Our refreshing signature cocktails"
     },
     {
-      "src": "/placeholder.svg",
-      "alt": "Welcoming restaurant interior",
+      "src": "/src/assets/welcoming-restaurant-interior.jpg",
+      "alt": "Welcoming Mexican restaurant interior",
       "caption": "Our welcoming space"
     }
   ]
