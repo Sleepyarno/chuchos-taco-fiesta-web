@@ -15,11 +15,11 @@ const GallerySection = () => {
     // Listen for storage events (cross-tab updates)
     window.addEventListener('storage', handleStorageChange);
     
-    // Also check for updates periodically (for same-tab updates)
+    // Check for updates every 5 seconds instead of every second for better performance
     const interval = setInterval(() => {
       const currentData = getGalleryData();
       setGalleryData(currentData);
-    }, 1000);
+    }, 5000);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
