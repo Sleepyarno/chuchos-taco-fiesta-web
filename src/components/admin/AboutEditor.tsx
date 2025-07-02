@@ -1,15 +1,18 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAboutData, updateAbout } from '@/utils/dataManager';
 import { useToast } from "@/components/ui/use-toast";
+import { Upload } from "lucide-react";
+import { uploadImageLocally, cleanupUploadedImage } from '@/utils/fileUploader';
 
 const AboutEditor = () => {
   const [aboutData, setAboutData] = useState(getAboutData());
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
     updateAbout(aboutData);
@@ -31,21 +34,100 @@ const AboutEditor = () => {
     setAboutData({ ...aboutData, features: newFeatures });
   };
 
+  const handleFileUpload = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Please select an image smaller than 10MB.",
+        variant: "destructive",
+      });
+      e.target.value = '';
+      return;
+    }
+    
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file (PNG, JPG, GIF, etc.).",
+        variant: "destructive",
+      });
+      e.target.value = '';
+      return;
+    }
+    
+    try {
+      const base64Data = await uploadImageLocally(file);
+      
+      // Clean up previous image if it was uploaded
+      if (aboutData.image.startsWith('data:') || aboutData.image.startsWith('blob:')) {
+        cleanupUploadedImage(aboutData.image);
+      }
+      
+      // Update the about data with the new image
+      setAboutData({ ...aboutData, image: base64Data });
+      
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      toast({
+        title: "Image uploaded successfully",
+        description: `"${file.name}" (${fileSizeMB}MB) has been processed and will be saved when you click Save Changes.`,
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast({
+        title: "Upload Failed",
+        description: error instanceof Error ? error.message : "Could not process the image. Please try again.",
+        variant: "destructive",
+      });
+    }
+    
+    e.target.value = '';
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>About Section Editor</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Hidden file input */}
+        <input 
+          type="file" 
+          ref={fileInputRef}
+          className="hidden" 
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+        
         <div>
           <h3 className="text-lg font-medium mb-2">Main Content</h3>
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium">Image URL</label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-sm font-medium">Image URL</label>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleFileUpload}
+                  className="flex items-center gap-2"
+                >
+                  <Upload className="h-4 w-4" /> Upload Image
+                </Button>
+              </div>
               <Input 
-                value={aboutData.image} 
+                value={aboutData.image.startsWith('data:') ? 'Uploaded image (base64)' : aboutData.image} 
                 onChange={(e) => setAboutData({...aboutData, image: e.target.value})}
                 className="mt-1"
+                placeholder="Image URL or click 'Upload Image' to upload (max 10MB)"
+                disabled={aboutData.image.startsWith('data:')}
               />
               {aboutData.image && (
                 <div className="mt-2">
